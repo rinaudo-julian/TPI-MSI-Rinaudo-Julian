@@ -1,9 +1,21 @@
 package ar.edu.msi2.solicitudes;
 
+import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantes;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantesEnMemoria;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsables;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsablesEnMemoria;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudesEnMemoria;
+
 public class Main {
     public static void main(String[] args) {
-        GestorSolicitudes gestor = new GestorSolicitudes();
-        gestor.cargarDatos();
+        RepositorioSolicitudes repositorioSolicitudes = new RepositorioSolicitudesEnMemoria();
+        RepositorioEstudiantes repositorioEstudiantes = new RepositorioEstudiantesEnMemoria();
+        RepositorioResponsables repositorioResponsables = new RepositorioResponsablesEnMemoria();
+
+        new DatosDePrueba(repositorioSolicitudes, repositorioEstudiantes, repositorioResponsables).cargar();
+
+        GestorSolicitudes gestor = new GestorSolicitudes(repositorioSolicitudes, repositorioEstudiantes, repositorioResponsables);
         gestor.mostrarMenu();
     }
 }

@@ -1,11 +1,8 @@
 package ar.edu.msi2.solicitudes;
 
 import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantes;
-import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantesEnMemoria;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsables;
-import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsablesEnMemoria;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;
-import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudesEnMemoria;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,13 +10,17 @@ import java.util.Scanner;
 
 public class GestorSolicitudes {
 
-    private final RepositorioSolicitudes repositorioSolicitudes = new RepositorioSolicitudesEnMemoria();
-    private final RepositorioEstudiantes repositorioEstudiantes = new RepositorioEstudiantesEnMemoria();
-    private final RepositorioResponsables repositorioResponsables = new RepositorioResponsablesEnMemoria();
+    private final RepositorioSolicitudes repositorioSolicitudes;
+    private final RepositorioEstudiantes repositorioEstudiantes;
+    private final RepositorioResponsables repositorioResponsables;
     Scanner scanner = new Scanner(System.in);
 
-    public void cargarDatos() {
-        new DatosDePrueba(repositorioSolicitudes, repositorioEstudiantes, repositorioResponsables).cargar();
+    public GestorSolicitudes(RepositorioSolicitudes repositorioSolicitudes,
+                             RepositorioEstudiantes repositorioEstudiantes,
+                             RepositorioResponsables repositorioResponsables) {
+        this.repositorioSolicitudes = repositorioSolicitudes;
+        this.repositorioEstudiantes = repositorioEstudiantes;
+        this.repositorioResponsables = repositorioResponsables;
     }
 
     public void mostrarMenu() {
