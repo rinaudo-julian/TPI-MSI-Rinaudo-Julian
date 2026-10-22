@@ -1,0 +1,8 @@
+# Ejecucion de tests de caracterizacion sobre la version inicial (tag estado-inicial)
+# Comando: mvn test
+# Fecha: 2026-10-22 19:34
+
+[INFO] Running ar.edu.msi2.solicitudes.CaracterizacionTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.065 s -- in ar.edu.msi2.solicitudes.CaracterizacionTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
