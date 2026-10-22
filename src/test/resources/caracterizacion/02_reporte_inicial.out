@@ -1,0 +1,38 @@
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+Total de solicitudes: 4
+Por estado:
+  PENDIENTE: 2
+  EN_PROCESO: 1
+  RESUELTA: 1
+  RECHAZADA: 0
+Por tipo:
+  CERTIFICADO: 1
+  EQUIVALENCIA: 1
+  CAMBIO_COMISION: 1
+  RECLAMO_NOTA: 1
+Por prioridad:
+  ALTA: 1
+  MEDIA: 2
+  BAJA: 1
+Porcentaje de resueltas: 25%
+Prioridad ALTA sin resolver: 1
+Sin responsable asignado: 2
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Hasta luego.

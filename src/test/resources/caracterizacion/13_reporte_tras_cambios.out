@@ -1,0 +1,130 @@
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Descripcion: Prioridad (1=Alta, 2=Media, 3=Baja): Solicitud registrada con ID 5 para Bruno Diaz.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Descripcion: Prioridad (1=Alta, 2=Media, 3=Baja): Solicitud registrada con ID 6 para Carla Perez.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: ID de la solicitud: Responsables disponibles:
+1. Laura Fernandez (ALUMNADO)
+2. Marcos Ruiz (ALUMNADO)
+3. Silvia Torres (DEPARTAMENTO ACADEMICO)
+ID del responsable: Responsable Marcos Ruiz asignado a la solicitud 5.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: ID de la solicitud: Estado actual: PENDIENTE
+Nuevo estado:
+1. Pendiente
+2. En proceso
+3. Resuelta
+4. Rechazada
+Opcion: Solicitud 5: PENDIENTE -> EN_PROCESO
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: ID de la solicitud: Estado actual: EN_PROCESO
+Nuevo estado:
+1. Pendiente
+2. En proceso
+3. Resuelta
+4. Rechazada
+Opcion: Solicitud 5: EN_PROCESO -> RESUELTA
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: ID de la solicitud: Estado actual: PENDIENTE
+Nuevo estado:
+1. Pendiente
+2. En proceso
+3. Resuelta
+4. Rechazada
+Opcion: Motivo del rechazo: Solicitud 1: PENDIENTE -> RECHAZADA
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+Total de solicitudes: 6
+Por estado:
+  PENDIENTE: 2
+  EN_PROCESO: 1
+  RESUELTA: 2
+  RECHAZADA: 1
+Por tipo:
+  CERTIFICADO: 2
+  EQUIVALENCIA: 1
+  CAMBIO_COMISION: 2
+  RECLAMO_NOTA: 1
+Por prioridad:
+  ALTA: 2
+  MEDIA: 2
+  BAJA: 2
+Porcentaje de resueltas: 33%
+Prioridad ALTA sin resolver: 2
+Sin responsable asignado: 3
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Hasta luego.

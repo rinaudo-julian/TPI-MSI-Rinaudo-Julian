@@ -1,0 +1,68 @@
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Descripcion: Prioridad (1=Alta, 2=Media, 3=Baja): Solicitud registrada con ID 5 para Ana Gomez.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Listado de solicitudes (5):
+#1 [CERTIFICADO] Certificado de alumno regular | Estudiante: Ana Gomez (1001) | Prioridad: BAJA | Estado: PENDIENTE | Responsable: -
+#2 [EQUIVALENCIA] Equivalencia de Algebra | Estudiante: Bruno Diaz (1002) | Prioridad: MEDIA | Estado: EN_PROCESO | Responsable: Silvia Torres
+#3 [RECLAMO_NOTA] Revision de nota del parcial de Contabilidad | Estudiante: Carla Perez (1003) | Prioridad: ALTA | Estado: PENDIENTE | Responsable: -
+#4 [CAMBIO_COMISION] Cambio a comision noche | Estudiante: Ana Gomez (1001) | Prioridad: MEDIA | Estado: RESUELTA | Responsable: Laura Fernandez
+#5 [CERTIFICADO] Certificado analitico | Estudiante: Ana Gomez (1001) | Prioridad: MEDIA | Estado: PENDIENTE | Responsable: -
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+Total de solicitudes: 5
+Por estado:
+  PENDIENTE: 3
+  EN_PROCESO: 1
+  RESUELTA: 1
+  RECHAZADA: 0
+Por tipo:
+  CERTIFICADO: 2
+  EQUIVALENCIA: 1
+  CAMBIO_COMISION: 1
+  RECLAMO_NOTA: 1
+Por prioridad:
+  ALTA: 1
+  MEDIA: 3
+  BAJA: 1
+Porcentaje de resueltas: 20%
+Prioridad ALTA sin resolver: 1
+Sin responsable asignado: 3
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Hasta luego.

@@ -1,0 +1,124 @@
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Error: no existe un estudiante con legajo 9999
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Error: tipo invalido
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Error: tipo invalido
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Descripcion: Error: la descripcion no puede estar vacia
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Descripcion: Error: la descripcion no puede superar los 200 caracteres
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Descripcion: Prioridad (1=Alta, 2=Media, 3=Baja): Error: prioridad invalida
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Legajo del estudiante: Tipo de solicitud:
+1. Certificado
+2. Equivalencia
+3. Cambio de comision
+4. Reclamo de nota
+Opcion: Descripcion: Prioridad (1=Alta, 2=Media, 3=Baja): Error: prioridad invalida
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Listado de solicitudes (4):
+#1 [CERTIFICADO] Certificado de alumno regular | Estudiante: Ana Gomez (1001) | Prioridad: BAJA | Estado: PENDIENTE | Responsable: -
+#2 [EQUIVALENCIA] Equivalencia de Algebra | Estudiante: Bruno Diaz (1002) | Prioridad: MEDIA | Estado: EN_PROCESO | Responsable: Silvia Torres
+#3 [RECLAMO_NOTA] Revision de nota del parcial de Contabilidad | Estudiante: Carla Perez (1003) | Prioridad: ALTA | Estado: PENDIENTE | Responsable: -
+#4 [CAMBIO_COMISION] Cambio a comision noche | Estudiante: Ana Gomez (1001) | Prioridad: MEDIA | Estado: RESUELTA | Responsable: Laura Fernandez
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Hasta luego.

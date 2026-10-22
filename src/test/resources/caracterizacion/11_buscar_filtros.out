@@ -1,0 +1,151 @@
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): #2 [EQUIVALENCIA] Equivalencia de Algebra | Estudiante: Bruno Diaz (1002) | Prioridad: MEDIA | Estado: EN_PROCESO | Responsable: Silvia Torres
+Se encontraron 1 solicitud(es).
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): #3 [RECLAMO_NOTA] Revision de nota del parcial de Contabilidad | Estudiante: Carla Perez (1003) | Prioridad: ALTA | Estado: PENDIENTE | Responsable: -
+Se encontraron 1 solicitud(es).
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Legajo: #1 [CERTIFICADO] Certificado de alumno regular | Estudiante: Ana Gomez (1001) | Prioridad: BAJA | Estado: PENDIENTE | Responsable: -
+#4 [CAMBIO_COMISION] Cambio a comision noche | Estudiante: Ana Gomez (1001) | Prioridad: MEDIA | Estado: RESUELTA | Responsable: Laura Fernandez
+Se encontraron 2 solicitud(es).
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Prioridad (1=Alta, 2=Media, 3=Baja): #2 [EQUIVALENCIA] Equivalencia de Algebra | Estudiante: Bruno Diaz (1002) | Prioridad: MEDIA | Estado: EN_PROCESO | Responsable: Silvia Torres
+#4 [CAMBIO_COMISION] Cambio a comision noche | Estudiante: Ana Gomez (1001) | Prioridad: MEDIA | Estado: RESUELTA | Responsable: Laura Fernandez
+Se encontraron 2 solicitud(es).
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Prioridad (1=Alta, 2=Media, 3=Baja): No se encontraron solicitudes.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): No se encontraron solicitudes.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Legajo: No se encontraron solicitudes.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): No se encontraron solicitudes.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo del estudiante
+4. Prioridad
+Opcion: Opcion invalida.
+
+===== GESTION DE SOLICITUDES ACADEMICAS =====
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Listar solicitudes
+6. Reporte
+0. Salir
+Opcion: Hasta luego.
