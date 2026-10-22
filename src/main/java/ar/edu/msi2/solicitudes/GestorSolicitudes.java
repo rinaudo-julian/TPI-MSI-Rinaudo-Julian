@@ -1,67 +1,65 @@
 package ar.edu.msi2.solicitudes;
 
-import java.util.ArrayList;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantes;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantesEnMemoria;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsables;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsablesEnMemoria;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;
+import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudesEnMemoria;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class GestorSolicitudes {
 
-    public ArrayList<Solicitud> solicitudes = new ArrayList<>();
-    public ArrayList<Estudiante> estudiantes = new ArrayList<>();
-    public ArrayList<Responsable> responsables = new ArrayList<>();
-    int ultimoId = 0;
+    private final RepositorioSolicitudes repositorioSolicitudes = new RepositorioSolicitudesEnMemoria();
+    private final RepositorioEstudiantes repositorioEstudiantes = new RepositorioEstudiantesEnMemoria();
+    private final RepositorioResponsables repositorioResponsables = new RepositorioResponsablesEnMemoria();
     Scanner scanner = new Scanner(System.in);
 
     public void cargarDatos() {
-        estudiantes.add(new Estudiante("1001", "Ana Gomez", "ana.gomez@mail.com", "Ingenieria en Sistemas"));
-        estudiantes.add(new Estudiante("1002", "Bruno Diaz", "bruno.diaz@mail.com", "Ingenieria en Sistemas"));
-        estudiantes.add(new Estudiante("1003", "Carla Perez", "carla.perez@mail.com", "Licenciatura en Administracion"));
+        repositorioEstudiantes.guardar(new Estudiante("1001", "Ana Gomez", "ana.gomez@mail.com", "Ingenieria en Sistemas"));
+        repositorioEstudiantes.guardar(new Estudiante("1002", "Bruno Diaz", "bruno.diaz@mail.com", "Ingenieria en Sistemas"));
+        repositorioEstudiantes.guardar(new Estudiante("1003", "Carla Perez", "carla.perez@mail.com", "Licenciatura en Administracion"));
 
-        responsables.add(new Responsable(1, "Laura Fernandez", "ALUMNADO"));
-        responsables.add(new Responsable(2, "Marcos Ruiz", "ALUMNADO"));
-        responsables.add(new Responsable(3, "Silvia Torres", "DEPARTAMENTO ACADEMICO"));
+        repositorioResponsables.guardar(new Responsable(1, "Laura Fernandez", "ALUMNADO"));
+        repositorioResponsables.guardar(new Responsable(2, "Marcos Ruiz", "ALUMNADO"));
+        repositorioResponsables.guardar(new Responsable(3, "Silvia Torres", "DEPARTAMENTO ACADEMICO"));
 
         // solicitudes de ejemplo
         Solicitud certificado = new Solicitud();
-        ultimoId++;
-        certificado.id = ultimoId;
         certificado.legajoEstudiante = "1001";
         certificado.tipo = "CERTIFICADO";
         certificado.descripcion = "Certificado de alumno regular";
         certificado.prioridad = 3;
         certificado.estado = "PENDIENTE";
-        solicitudes.add(certificado);
+        repositorioSolicitudes.guardar(certificado);
 
         Solicitud equivalencia = new Solicitud();
-        ultimoId++;
-        equivalencia.id = ultimoId;
         equivalencia.legajoEstudiante = "1002";
         equivalencia.tipo = "EQUIVALENCIA";
         equivalencia.descripcion = "Equivalencia de Algebra";
         equivalencia.prioridad = 2;
         equivalencia.estado = "EN_PROCESO";
-        equivalencia.responsable = responsables.get(2);
-        solicitudes.add(equivalencia);
+        equivalencia.responsable = repositorioResponsables.buscarTodos().get(2);
+        repositorioSolicitudes.guardar(equivalencia);
 
         Solicitud reclamoNota = new Solicitud();
-        ultimoId++;
-        reclamoNota.id = ultimoId;
         reclamoNota.legajoEstudiante = "1003";
         reclamoNota.tipo = "RECLAMO_NOTA";
         reclamoNota.descripcion = "Revision de nota del parcial de Contabilidad";
         reclamoNota.prioridad = 1;
         reclamoNota.estado = "PENDIENTE";
-        solicitudes.add(reclamoNota);
+        repositorioSolicitudes.guardar(reclamoNota);
 
         Solicitud cambioComision = new Solicitud();
-        ultimoId++;
-        cambioComision.id = ultimoId;
         cambioComision.legajoEstudiante = "1001";
         cambioComision.tipo = "CAMBIO_COMISION";
         cambioComision.descripcion = "Cambio a comision noche";
         cambioComision.prioridad = 2;
         cambioComision.estado = "RESUELTA";
-        cambioComision.responsable = responsables.get(0);
-        solicitudes.add(cambioComision);
+        cambioComision.responsable = repositorioResponsables.buscarTodos().get(0);
+        repositorioSolicitudes.guardar(cambioComision);
     }
 
     public void mostrarMenu() {
@@ -107,9 +105,9 @@ public class GestorSolicitudes {
         System.out.print("Legajo del estudiante: ");
         String legajo = scanner.nextLine().trim();
         Estudiante estudiante = null;
-        for (int i = 0; i < estudiantes.size(); i++) {
-            if (estudiantes.get(i).legajo.equals(legajo)) {
-                estudiante = estudiantes.get(i);
+        for (Estudiante candidato : repositorioEstudiantes.buscarTodos()) {
+            if (candidato.legajo.equals(legajo)) {
+                estudiante = candidato;
             }
         }
         if (estudiante == null) {
@@ -172,14 +170,12 @@ public class GestorSolicitudes {
         }
 
         Solicitud solicitud = new Solicitud();
-        ultimoId++;
-        solicitud.id = ultimoId;
         solicitud.legajoEstudiante = legajo;
         solicitud.tipo = tipo;
         solicitud.descripcion = descripcion;
         solicitud.prioridad = prioridad;
         solicitud.estado = "PENDIENTE";
-        solicitudes.add(solicitud);
+        repositorioSolicitudes.guardar(solicitud);
         System.out.println("Solicitud registrada con ID " + solicitud.id + " para " + estudiante.nombre + ".");
     }
 
@@ -192,7 +188,7 @@ public class GestorSolicitudes {
             id = -1;
         }
         Solicitud solicitud = null;
-        for (Solicitud candidata : solicitudes) {
+        for (Solicitud candidata : repositorioSolicitudes.buscarTodas()) {
             if (candidata.id == id) {
                 solicitud = candidata;
                 break;
@@ -282,7 +278,7 @@ public class GestorSolicitudes {
             id = -1;
         }
         Solicitud solicitud = null;
-        for (Solicitud candidata : solicitudes) {
+        for (Solicitud candidata : repositorioSolicitudes.buscarTodas()) {
             if (candidata.id == id) {
                 solicitud = candidata;
                 break;
@@ -298,7 +294,7 @@ public class GestorSolicitudes {
         }
 
         System.out.println("Responsables disponibles:");
-        for (Responsable disponible : responsables) {
+        for (Responsable disponible : repositorioResponsables.buscarTodos()) {
             System.out.println(disponible.id + ". " + disponible.nombre + " (" + disponible.area + ")");
         }
         System.out.print("ID del responsable: ");
@@ -309,7 +305,7 @@ public class GestorSolicitudes {
             idResponsable = -1;
         }
         Responsable responsable = null;
-        for (Responsable candidato : responsables) {
+        for (Responsable candidato : repositorioResponsables.buscarTodos()) {
             if (candidato.id == idResponsable) {
                 responsable = candidato;
             }
@@ -353,10 +349,10 @@ public class GestorSolicitudes {
         if (opcionFiltro == 1) {
             System.out.print("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ");
             String estadoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
-            for (Solicitud solicitud : solicitudes) {
+            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.estado.equals(estadoBuscado)) {
                     String nombreEstudiante = "";
-                    for (Estudiante estudiante : estudiantes) {
+                    for (Estudiante estudiante : repositorioEstudiantes.buscarTodos()) {
                         if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
                             nombreEstudiante = estudiante.nombre;
                         }
@@ -382,10 +378,10 @@ public class GestorSolicitudes {
         } else if (opcionFiltro == 2) {
             System.out.print("Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): ");
             String tipoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
-            for (Solicitud solicitud : solicitudes) {
+            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.tipo.equals(tipoBuscado)) {
                     String nombreEstudiante = "";
-                    for (Estudiante estudiante : estudiantes) {
+                    for (Estudiante estudiante : repositorioEstudiantes.buscarTodos()) {
                         if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
                             nombreEstudiante = estudiante.nombre;
                         }
@@ -411,10 +407,10 @@ public class GestorSolicitudes {
         } else if (opcionFiltro == 3) {
             System.out.print("Legajo: ");
             String legajoBuscado = scanner.nextLine().trim();
-            for (Solicitud solicitud : solicitudes) {
+            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.legajoEstudiante.equals(legajoBuscado)) {
                     String nombreEstudiante = "";
-                    for (Estudiante estudiante : estudiantes) {
+                    for (Estudiante estudiante : repositorioEstudiantes.buscarTodos()) {
                         if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
                             nombreEstudiante = estudiante.nombre;
                         }
@@ -445,10 +441,10 @@ public class GestorSolicitudes {
             } catch (Exception e) {
                 prioridadBuscada = -1;
             }
-            for (Solicitud solicitud : solicitudes) {
+            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.prioridad == prioridadBuscada) {
                     String nombreEstudiante = "";
-                    for (Estudiante estudiante : estudiantes) {
+                    for (Estudiante estudiante : repositorioEstudiantes.buscarTodos()) {
                         if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
                             nombreEstudiante = estudiante.nombre;
                         }
@@ -483,6 +479,7 @@ public class GestorSolicitudes {
     }
 
     public void listarSolicitudes() {
+        List<Solicitud> solicitudes = repositorioSolicitudes.buscarTodas();
         if (solicitudes.size() == 0) {
             System.out.println("No hay solicitudes registradas.");
             return;
@@ -490,7 +487,7 @@ public class GestorSolicitudes {
         System.out.println("Listado de solicitudes (" + solicitudes.size() + "):");
         for (Solicitud solicitud : solicitudes) {
             String nombreEstudiante = "";
-            for (Estudiante estudiante : estudiantes) {
+            for (Estudiante estudiante : repositorioEstudiantes.buscarTodos()) {
                 if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
                     nombreEstudiante = estudiante.nombre;
                 }
@@ -515,6 +512,7 @@ public class GestorSolicitudes {
     }
 
     public void generarReporte() {
+        List<Solicitud> solicitudes = repositorioSolicitudes.buscarTodas();
         int total = solicitudes.size();
         int pendientes = 0, enProceso = 0, resueltas = 0, rechazadas = 0;
         int certificados = 0, equivalencias = 0, cambiosComision = 0, reclamosNota = 0;
@@ -569,6 +567,7 @@ public class GestorSolicitudes {
     }
 
     public Solicitud buscarPorId(int id) {
+        List<Solicitud> solicitudes = repositorioSolicitudes.buscarTodas();
         for (int i = 0; i < solicitudes.size(); i++) {
             if (solicitudes.get(i).id == id) {
                 return solicitudes.get(i);
