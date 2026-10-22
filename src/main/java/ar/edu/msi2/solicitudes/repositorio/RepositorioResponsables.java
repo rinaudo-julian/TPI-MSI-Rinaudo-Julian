@@ -8,7 +8,8 @@ import java.util.Optional;
 public interface RepositorioResponsables {
 
     /**
-     * Guarda el responsable. Si ya existe uno con el mismo id, lo reemplaza.
+     * Guarda el responsable. Si es nuevo (id == 0) le asigna el proximo id disponible;
+     * si ya existe, lo reemplaza.
      */
     Responsable guardar(Responsable responsable);
 

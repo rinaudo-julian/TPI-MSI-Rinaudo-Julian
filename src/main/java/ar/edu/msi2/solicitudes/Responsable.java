@@ -5,8 +5,7 @@ public class Responsable {
     public String nombre;
     public String area;
 
-    public Responsable(int id, String nombre, String area) {
-        this.id = id;
+    public Responsable(String nombre, String area) {
         this.nombre = nombre;
         this.area = area;
     }

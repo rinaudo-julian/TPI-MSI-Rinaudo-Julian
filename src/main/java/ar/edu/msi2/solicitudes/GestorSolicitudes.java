@@ -19,48 +19,7 @@ public class GestorSolicitudes {
     Scanner scanner = new Scanner(System.in);
 
     public void cargarDatos() {
-        repositorioEstudiantes.guardar(new Estudiante("1001", "Ana Gomez", "ana.gomez@mail.com", "Ingenieria en Sistemas"));
-        repositorioEstudiantes.guardar(new Estudiante("1002", "Bruno Diaz", "bruno.diaz@mail.com", "Ingenieria en Sistemas"));
-        repositorioEstudiantes.guardar(new Estudiante("1003", "Carla Perez", "carla.perez@mail.com", "Licenciatura en Administracion"));
-
-        repositorioResponsables.guardar(new Responsable(1, "Laura Fernandez", "ALUMNADO"));
-        repositorioResponsables.guardar(new Responsable(2, "Marcos Ruiz", "ALUMNADO"));
-        repositorioResponsables.guardar(new Responsable(3, "Silvia Torres", "DEPARTAMENTO ACADEMICO"));
-
-        // solicitudes de ejemplo
-        Solicitud certificado = new Solicitud();
-        certificado.legajoEstudiante = "1001";
-        certificado.tipo = "CERTIFICADO";
-        certificado.descripcion = "Certificado de alumno regular";
-        certificado.prioridad = 3;
-        certificado.estado = "PENDIENTE";
-        repositorioSolicitudes.guardar(certificado);
-
-        Solicitud equivalencia = new Solicitud();
-        equivalencia.legajoEstudiante = "1002";
-        equivalencia.tipo = "EQUIVALENCIA";
-        equivalencia.descripcion = "Equivalencia de Algebra";
-        equivalencia.prioridad = 2;
-        equivalencia.estado = "EN_PROCESO";
-        equivalencia.responsable = repositorioResponsables.buscarTodos().get(2);
-        repositorioSolicitudes.guardar(equivalencia);
-
-        Solicitud reclamoNota = new Solicitud();
-        reclamoNota.legajoEstudiante = "1003";
-        reclamoNota.tipo = "RECLAMO_NOTA";
-        reclamoNota.descripcion = "Revision de nota del parcial de Contabilidad";
-        reclamoNota.prioridad = 1;
-        reclamoNota.estado = "PENDIENTE";
-        repositorioSolicitudes.guardar(reclamoNota);
-
-        Solicitud cambioComision = new Solicitud();
-        cambioComision.legajoEstudiante = "1001";
-        cambioComision.tipo = "CAMBIO_COMISION";
-        cambioComision.descripcion = "Cambio a comision noche";
-        cambioComision.prioridad = 2;
-        cambioComision.estado = "RESUELTA";
-        cambioComision.responsable = repositorioResponsables.buscarTodos().get(0);
-        repositorioSolicitudes.guardar(cambioComision);
+        new DatosDePrueba(repositorioSolicitudes, repositorioEstudiantes, repositorioResponsables).cargar();
     }
 
     public void mostrarMenu() {
