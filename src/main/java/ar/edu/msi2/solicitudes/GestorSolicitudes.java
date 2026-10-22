@@ -3,14 +3,13 @@ package ar.edu.msi2.solicitudes;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// Clase principal del sistema
 public class GestorSolicitudes {
 
-    public ArrayList<Solicitud> lista = new ArrayList<>();
+    public ArrayList<Solicitud> solicitudes = new ArrayList<>();
     public ArrayList<Estudiante> estudiantes = new ArrayList<>();
     public ArrayList<Responsable> responsables = new ArrayList<>();
-    int ultId = 0;
-    Scanner sc = new Scanner(System.in);
+    int ultimoId = 0;
+    Scanner scanner = new Scanner(System.in);
 
     public void cargarDatos() {
         estudiantes.add(new Estudiante("1001", "Ana Gomez", "ana.gomez@mail.com", "Ingenieria en Sistemas"));
@@ -22,52 +21,52 @@ public class GestorSolicitudes {
         responsables.add(new Responsable(3, "Silvia Torres", "DEPARTAMENTO ACADEMICO"));
 
         // solicitudes de ejemplo
-        Solicitud s = new Solicitud();
-        ultId++;
-        s.id = ultId;
-        s.legajo = "1001";
-        s.tipo = "CERTIFICADO";
-        s.desc = "Certificado de alumno regular";
-        s.prioridad = 3;
-        s.estado = "PENDIENTE";
-        lista.add(s);
+        Solicitud certificado = new Solicitud();
+        ultimoId++;
+        certificado.id = ultimoId;
+        certificado.legajoEstudiante = "1001";
+        certificado.tipo = "CERTIFICADO";
+        certificado.descripcion = "Certificado de alumno regular";
+        certificado.prioridad = 3;
+        certificado.estado = "PENDIENTE";
+        solicitudes.add(certificado);
 
-        s = new Solicitud();
-        ultId++;
-        s.id = ultId;
-        s.legajo = "1002";
-        s.tipo = "EQUIVALENCIA";
-        s.desc = "Equivalencia de Algebra";
-        s.prioridad = 2;
-        s.estado = "EN_PROCESO";
-        s.resp = responsables.get(2);
-        lista.add(s);
+        Solicitud equivalencia = new Solicitud();
+        ultimoId++;
+        equivalencia.id = ultimoId;
+        equivalencia.legajoEstudiante = "1002";
+        equivalencia.tipo = "EQUIVALENCIA";
+        equivalencia.descripcion = "Equivalencia de Algebra";
+        equivalencia.prioridad = 2;
+        equivalencia.estado = "EN_PROCESO";
+        equivalencia.responsable = responsables.get(2);
+        solicitudes.add(equivalencia);
 
-        s = new Solicitud();
-        ultId++;
-        s.id = ultId;
-        s.legajo = "1003";
-        s.tipo = "RECLAMO_NOTA";
-        s.desc = "Revision de nota del parcial de Contabilidad";
-        s.prioridad = 1;
-        s.estado = "PENDIENTE";
-        lista.add(s);
+        Solicitud reclamoNota = new Solicitud();
+        ultimoId++;
+        reclamoNota.id = ultimoId;
+        reclamoNota.legajoEstudiante = "1003";
+        reclamoNota.tipo = "RECLAMO_NOTA";
+        reclamoNota.descripcion = "Revision de nota del parcial de Contabilidad";
+        reclamoNota.prioridad = 1;
+        reclamoNota.estado = "PENDIENTE";
+        solicitudes.add(reclamoNota);
 
-        s = new Solicitud();
-        ultId++;
-        s.id = ultId;
-        s.legajo = "1001";
-        s.tipo = "CAMBIO_COMISION";
-        s.desc = "Cambio a comision noche";
-        s.prioridad = 2;
-        s.estado = "RESUELTA";
-        s.resp = responsables.get(0);
-        lista.add(s);
+        Solicitud cambioComision = new Solicitud();
+        ultimoId++;
+        cambioComision.id = ultimoId;
+        cambioComision.legajoEstudiante = "1001";
+        cambioComision.tipo = "CAMBIO_COMISION";
+        cambioComision.descripcion = "Cambio a comision noche";
+        cambioComision.prioridad = 2;
+        cambioComision.estado = "RESUELTA";
+        cambioComision.responsable = responsables.get(0);
+        solicitudes.add(cambioComision);
     }
 
-    public void menu() {
-        int op = -1;
-        while (op != 0) {
+    public void mostrarMenu() {
+        int opcion = -1;
+        while (opcion != 0) {
             System.out.println();
             System.out.println("===== GESTION DE SOLICITUDES ACADEMICAS =====");
             System.out.println("1. Registrar solicitud");
@@ -78,25 +77,25 @@ public class GestorSolicitudes {
             System.out.println("6. Reporte");
             System.out.println("0. Salir");
             System.out.print("Opcion: ");
-            String linea = sc.nextLine();
+            String entrada = scanner.nextLine();
             try {
-                op = Integer.parseInt(linea.trim());
+                opcion = Integer.parseInt(entrada.trim());
             } catch (Exception e) {
-                op = -1;
+                opcion = -1;
             }
-            if (op == 1) {
-                registrar();
-            } else if (op == 2) {
+            if (opcion == 1) {
+                registrarSolicitud();
+            } else if (opcion == 2) {
                 cambiarEstado();
-            } else if (op == 3) {
-                asignar();
-            } else if (op == 4) {
-                buscar();
-            } else if (op == 5) {
-                listar();
-            } else if (op == 6) {
-                reporte();
-            } else if (op == 0) {
+            } else if (opcion == 3) {
+                asignarResponsable();
+            } else if (opcion == 4) {
+                buscarSolicitudes();
+            } else if (opcion == 5) {
+                listarSolicitudes();
+            } else if (opcion == 6) {
+                generarReporte();
+            } else if (opcion == 0) {
                 System.out.println("Hasta luego.");
             } else {
                 System.out.println("Opcion invalida.");
@@ -104,17 +103,17 @@ public class GestorSolicitudes {
         }
     }
 
-    public void registrar() {
+    public void registrarSolicitud() {
         System.out.print("Legajo del estudiante: ");
-        String leg = sc.nextLine().trim();
-        Estudiante e = null;
+        String legajo = scanner.nextLine().trim();
+        Estudiante estudiante = null;
         for (int i = 0; i < estudiantes.size(); i++) {
-            if (estudiantes.get(i).legajo.equals(leg)) {
-                e = estudiantes.get(i);
+            if (estudiantes.get(i).legajo.equals(legajo)) {
+                estudiante = estudiantes.get(i);
             }
         }
-        if (e == null) {
-            System.out.println("Error: no existe un estudiante con legajo " + leg);
+        if (estudiante == null) {
+            System.out.println("Error: no existe un estudiante con legajo " + legajo);
             return;
         }
 
@@ -124,20 +123,20 @@ public class GestorSolicitudes {
         System.out.println("3. Cambio de comision");
         System.out.println("4. Reclamo de nota");
         System.out.print("Opcion: ");
-        int t;
+        int opcionTipo;
         try {
-            t = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception ex) {
-            t = -1;
+            opcionTipo = Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception e) {
+            opcionTipo = -1;
         }
         String tipo = "";
-        if (t == 1) {
+        if (opcionTipo == 1) {
             tipo = "CERTIFICADO";
-        } else if (t == 2) {
+        } else if (opcionTipo == 2) {
             tipo = "EQUIVALENCIA";
-        } else if (t == 3) {
+        } else if (opcionTipo == 3) {
             tipo = "CAMBIO_COMISION";
-        } else if (t == 4) {
+        } else if (opcionTipo == 4) {
             tipo = "RECLAMO_NOTA";
         } else {
             System.out.println("Error: tipo invalido");
@@ -145,91 +144,91 @@ public class GestorSolicitudes {
         }
 
         System.out.print("Descripcion: ");
-        String d = sc.nextLine().trim();
-        if (d.equals("")) {
+        String descripcion = scanner.nextLine().trim();
+        if (descripcion.equals("")) {
             System.out.println("Error: la descripcion no puede estar vacia");
             return;
         }
-        if (d.length() > 200) {
+        if (descripcion.length() > 200) {
             System.out.println("Error: la descripcion no puede superar los 200 caracteres");
             return;
         }
 
         System.out.print("Prioridad (1=Alta, 2=Media, 3=Baja): ");
-        int p;
+        int prioridad;
         try {
-            p = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception ex) {
-            p = -1;
+            prioridad = Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception e) {
+            prioridad = -1;
         }
-        if (p < 1 || p > 3) {
+        if (prioridad < 1 || prioridad > 3) {
             System.out.println("Error: prioridad invalida");
             return;
         }
 
         // los reclamos de nota siempre van con prioridad alta (pedido de secretaria)
         if (tipo.equals("RECLAMO_NOTA")) {
-            p = 1;
+            prioridad = 1;
         }
 
-        Solicitud s = new Solicitud();
-        ultId++;
-        s.id = ultId;
-        s.legajo = leg;
-        s.tipo = tipo;
-        s.desc = d;
-        s.prioridad = p;
-        s.estado = "PENDIENTE";
-        lista.add(s);
-        System.out.println("Solicitud registrada con ID " + s.id + " para " + e.nombre + ".");
+        Solicitud solicitud = new Solicitud();
+        ultimoId++;
+        solicitud.id = ultimoId;
+        solicitud.legajoEstudiante = legajo;
+        solicitud.tipo = tipo;
+        solicitud.descripcion = descripcion;
+        solicitud.prioridad = prioridad;
+        solicitud.estado = "PENDIENTE";
+        solicitudes.add(solicitud);
+        System.out.println("Solicitud registrada con ID " + solicitud.id + " para " + estudiante.nombre + ".");
     }
 
     public void cambiarEstado() {
         System.out.print("ID de la solicitud: ");
         int id;
         try {
-            id = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception ex) {
+            id = Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception e) {
             id = -1;
         }
-        Solicitud s = null;
-        for (Solicitud x : lista) {
-            if (x.id == id) {
-                s = x;
+        Solicitud solicitud = null;
+        for (Solicitud candidata : solicitudes) {
+            if (candidata.id == id) {
+                solicitud = candidata;
                 break;
             }
         }
-        if (s == null) {
+        if (solicitud == null) {
             System.out.println("Error: no existe la solicitud " + id);
             return;
         }
 
-        System.out.println("Estado actual: " + s.estado);
+        System.out.println("Estado actual: " + solicitud.estado);
         System.out.println("Nuevo estado:");
         System.out.println("1. Pendiente");
         System.out.println("2. En proceso");
         System.out.println("3. Resuelta");
         System.out.println("4. Rechazada");
         System.out.print("Opcion: ");
-        int op;
+        int opcionEstado;
         try {
-            op = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception ex) {
-            op = -1;
+            opcionEstado = Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception e) {
+            opcionEstado = -1;
         }
-        String nuevo;
-        switch (op) {
+        String estadoNuevo;
+        switch (opcionEstado) {
             case 1:
-                nuevo = "PENDIENTE";
+                estadoNuevo = "PENDIENTE";
                 break;
             case 2:
-                nuevo = "EN_PROCESO";
+                estadoNuevo = "EN_PROCESO";
                 break;
             case 3:
-                nuevo = "RESUELTA";
+                estadoNuevo = "RESUELTA";
                 break;
             case 4:
-                nuevo = "RECHAZADA";
+                estadoNuevo = "RECHAZADA";
                 break;
             default:
                 System.out.println("Error: estado invalido");
@@ -237,342 +236,342 @@ public class GestorSolicitudes {
         }
 
         // validar transicion
-        boolean ok = false;
-        if (s.estado.equals("PENDIENTE")) {
-            if (nuevo.equals("EN_PROCESO") || nuevo.equals("RECHAZADA")) {
-                ok = true;
+        boolean transicionValida = false;
+        if (solicitud.estado.equals("PENDIENTE")) {
+            if (estadoNuevo.equals("EN_PROCESO") || estadoNuevo.equals("RECHAZADA")) {
+                transicionValida = true;
             }
-        } else if (s.estado.equals("EN_PROCESO")) {
-            if (nuevo.equals("RESUELTA") || nuevo.equals("RECHAZADA")) {
-                ok = true;
+        } else if (solicitud.estado.equals("EN_PROCESO")) {
+            if (estadoNuevo.equals("RESUELTA") || estadoNuevo.equals("RECHAZADA")) {
+                transicionValida = true;
             }
-        } else if (s.estado.equals("RESUELTA") || s.estado.equals("RECHAZADA")) {
-            ok = false;
+        } else if (solicitud.estado.equals("RESUELTA") || solicitud.estado.equals("RECHAZADA")) {
+            transicionValida = false;
         }
-        if (!ok) {
-            System.out.println("Error: no se puede pasar de " + s.estado + " a " + nuevo);
+        if (!transicionValida) {
+            System.out.println("Error: no se puede pasar de " + solicitud.estado + " a " + estadoNuevo);
             return;
         }
 
-        if (nuevo.equals("EN_PROCESO") && s.resp == null) {
+        if (estadoNuevo.equals("EN_PROCESO") && solicitud.responsable == null) {
             System.out.println("Error: la solicitud debe tener un responsable asignado para pasar a EN_PROCESO");
             return;
         }
 
-        if (nuevo.equals("RECHAZADA")) {
+        if (estadoNuevo.equals("RECHAZADA")) {
             System.out.print("Motivo del rechazo: ");
-            String m = sc.nextLine().trim();
-            if (m.equals("")) {
+            String motivo = scanner.nextLine().trim();
+            if (motivo.equals("")) {
                 System.out.println("Error: el motivo del rechazo es obligatorio");
                 return;
             }
-            s.obs = m;
+            solicitud.motivoRechazo = motivo;
         }
 
-        String ant = s.estado;
-        s.estado = nuevo;
-        System.out.println("Solicitud " + s.id + ": " + ant + " -> " + nuevo);
+        String estadoAnterior = solicitud.estado;
+        solicitud.estado = estadoNuevo;
+        System.out.println("Solicitud " + solicitud.id + ": " + estadoAnterior + " -> " + estadoNuevo);
     }
 
-    public void asignar() {
+    public void asignarResponsable() {
         System.out.print("ID de la solicitud: ");
         int id;
         try {
-            id = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception ex) {
+            id = Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception e) {
             id = -1;
         }
-        Solicitud s = null;
-        for (Solicitud x : lista) {
-            if (x.id == id) {
-                s = x;
+        Solicitud solicitud = null;
+        for (Solicitud candidata : solicitudes) {
+            if (candidata.id == id) {
+                solicitud = candidata;
                 break;
             }
         }
-        if (s == null) {
+        if (solicitud == null) {
             System.out.println("Error: no existe la solicitud " + id);
             return;
         }
-        if (s.estado.equals("RESUELTA") || s.estado.equals("RECHAZADA")) {
+        if (solicitud.estado.equals("RESUELTA") || solicitud.estado.equals("RECHAZADA")) {
             System.out.println("Error: no se puede asignar responsable a una solicitud cerrada");
             return;
         }
 
         System.out.println("Responsables disponibles:");
-        for (Responsable r : responsables) {
-            System.out.println(r.id + ". " + r.nombre + " (" + r.area + ")");
+        for (Responsable disponible : responsables) {
+            System.out.println(disponible.id + ". " + disponible.nombre + " (" + disponible.area + ")");
         }
         System.out.print("ID del responsable: ");
-        int rid;
+        int idResponsable;
         try {
-            rid = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception ex) {
-            rid = -1;
+            idResponsable = Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception e) {
+            idResponsable = -1;
         }
-        Responsable r = null;
-        for (Responsable aux : responsables) {
-            if (aux.id == rid) {
-                r = aux;
+        Responsable responsable = null;
+        for (Responsable candidato : responsables) {
+            if (candidato.id == idResponsable) {
+                responsable = candidato;
             }
         }
-        if (r == null) {
-            System.out.println("Error: no existe el responsable " + rid);
+        if (responsable == null) {
+            System.out.println("Error: no existe el responsable " + idResponsable);
             return;
         }
 
         // cada area atiende ciertos tipos
         String areaNecesaria;
-        if (s.tipo.equals("CERTIFICADO") || s.tipo.equals("CAMBIO_COMISION")) {
+        if (solicitud.tipo.equals("CERTIFICADO") || solicitud.tipo.equals("CAMBIO_COMISION")) {
             areaNecesaria = "ALUMNADO";
         } else {
             areaNecesaria = "DEPARTAMENTO ACADEMICO";
         }
-        if (!r.area.equals(areaNecesaria)) {
-            System.out.println("Error: las solicitudes de tipo " + s.tipo + " las atiende el area " + areaNecesaria);
+        if (!responsable.area.equals(areaNecesaria)) {
+            System.out.println("Error: las solicitudes de tipo " + solicitud.tipo + " las atiende el area " + areaNecesaria);
             return;
         }
 
-        s.resp = r;
-        System.out.println("Responsable " + r.nombre + " asignado a la solicitud " + s.id + ".");
+        solicitud.responsable = responsable;
+        System.out.println("Responsable " + responsable.nombre + " asignado a la solicitud " + solicitud.id + ".");
     }
 
-    public void buscar() {
+    public void buscarSolicitudes() {
         System.out.println("Buscar por:");
         System.out.println("1. Estado");
         System.out.println("2. Tipo");
         System.out.println("3. Legajo del estudiante");
         System.out.println("4. Prioridad");
         System.out.print("Opcion: ");
-        int op;
+        int opcionFiltro;
         try {
-            op = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception ex) {
-            op = -1;
+            opcionFiltro = Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception e) {
+            opcionFiltro = -1;
         }
 
-        int cont = 0;
-        if (op == 1) {
+        int encontradas = 0;
+        if (opcionFiltro == 1) {
             System.out.print("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ");
-            String est = sc.nextLine().trim().toUpperCase().replace(" ", "_");
-            for (Solicitud s : lista) {
-                if (s.estado.equals(est)) {
-                    String nom = "";
-                    for (Estudiante e : estudiantes) {
-                        if (e.legajo.equals(s.legajo)) {
-                            nom = e.nombre;
+            String estadoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
+            for (Solicitud solicitud : solicitudes) {
+                if (solicitud.estado.equals(estadoBuscado)) {
+                    String nombreEstudiante = "";
+                    for (Estudiante estudiante : estudiantes) {
+                        if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
+                            nombreEstudiante = estudiante.nombre;
                         }
                     }
-                    String pr;
-                    if (s.prioridad == 1) {
-                        pr = "ALTA";
-                    } else if (s.prioridad == 2) {
-                        pr = "MEDIA";
+                    String etiquetaPrioridad;
+                    if (solicitud.prioridad == 1) {
+                        etiquetaPrioridad = "ALTA";
+                    } else if (solicitud.prioridad == 2) {
+                        etiquetaPrioridad = "MEDIA";
                     } else {
-                        pr = "BAJA";
+                        etiquetaPrioridad = "BAJA";
                     }
-                    String linea = "#" + s.id + " [" + s.tipo + "] " + s.desc + " | Estudiante: " + nom + " (" + s.legajo + ")"
-                            + " | Prioridad: " + pr + " | Estado: " + s.estado
-                            + " | Responsable: " + (s.resp == null ? "-" : s.resp.nombre);
-                    if (s.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + s.obs;
+                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
+                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
+                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
+                    if (solicitud.estado.equals("RECHAZADA")) {
+                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
                     }
                     System.out.println(linea);
-                    cont++;
+                    encontradas++;
                 }
             }
-        } else if (op == 2) {
+        } else if (opcionFiltro == 2) {
             System.out.print("Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): ");
-            String tip = sc.nextLine().trim().toUpperCase().replace(" ", "_");
-            for (Solicitud s : lista) {
-                if (s.tipo.equals(tip)) {
-                    String nom = "";
-                    for (Estudiante e : estudiantes) {
-                        if (e.legajo.equals(s.legajo)) {
-                            nom = e.nombre;
+            String tipoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
+            for (Solicitud solicitud : solicitudes) {
+                if (solicitud.tipo.equals(tipoBuscado)) {
+                    String nombreEstudiante = "";
+                    for (Estudiante estudiante : estudiantes) {
+                        if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
+                            nombreEstudiante = estudiante.nombre;
                         }
                     }
-                    String pr;
-                    if (s.prioridad == 1) {
-                        pr = "ALTA";
-                    } else if (s.prioridad == 2) {
-                        pr = "MEDIA";
+                    String etiquetaPrioridad;
+                    if (solicitud.prioridad == 1) {
+                        etiquetaPrioridad = "ALTA";
+                    } else if (solicitud.prioridad == 2) {
+                        etiquetaPrioridad = "MEDIA";
                     } else {
-                        pr = "BAJA";
+                        etiquetaPrioridad = "BAJA";
                     }
-                    String linea = "#" + s.id + " [" + s.tipo + "] " + s.desc + " | Estudiante: " + nom + " (" + s.legajo + ")"
-                            + " | Prioridad: " + pr + " | Estado: " + s.estado
-                            + " | Responsable: " + (s.resp == null ? "-" : s.resp.nombre);
-                    if (s.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + s.obs;
+                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
+                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
+                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
+                    if (solicitud.estado.equals("RECHAZADA")) {
+                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
                     }
                     System.out.println(linea);
-                    cont++;
+                    encontradas++;
                 }
             }
-        } else if (op == 3) {
+        } else if (opcionFiltro == 3) {
             System.out.print("Legajo: ");
-            String leg = sc.nextLine().trim();
-            for (Solicitud s : lista) {
-                if (s.legajo.equals(leg)) {
-                    String nom = "";
-                    for (Estudiante e : estudiantes) {
-                        if (e.legajo.equals(s.legajo)) {
-                            nom = e.nombre;
+            String legajoBuscado = scanner.nextLine().trim();
+            for (Solicitud solicitud : solicitudes) {
+                if (solicitud.legajoEstudiante.equals(legajoBuscado)) {
+                    String nombreEstudiante = "";
+                    for (Estudiante estudiante : estudiantes) {
+                        if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
+                            nombreEstudiante = estudiante.nombre;
                         }
                     }
-                    String pr;
-                    if (s.prioridad == 1) {
-                        pr = "ALTA";
-                    } else if (s.prioridad == 2) {
-                        pr = "MEDIA";
+                    String etiquetaPrioridad;
+                    if (solicitud.prioridad == 1) {
+                        etiquetaPrioridad = "ALTA";
+                    } else if (solicitud.prioridad == 2) {
+                        etiquetaPrioridad = "MEDIA";
                     } else {
-                        pr = "BAJA";
+                        etiquetaPrioridad = "BAJA";
                     }
-                    String linea = "#" + s.id + " [" + s.tipo + "] " + s.desc + " | Estudiante: " + nom + " (" + s.legajo + ")"
-                            + " | Prioridad: " + pr + " | Estado: " + s.estado
-                            + " | Responsable: " + (s.resp == null ? "-" : s.resp.nombre);
-                    if (s.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + s.obs;
+                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
+                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
+                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
+                    if (solicitud.estado.equals("RECHAZADA")) {
+                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
                     }
                     System.out.println(linea);
-                    cont++;
+                    encontradas++;
                 }
             }
-        } else if (op == 4) {
+        } else if (opcionFiltro == 4) {
             System.out.print("Prioridad (1=Alta, 2=Media, 3=Baja): ");
-            int p;
+            int prioridadBuscada;
             try {
-                p = Integer.parseInt(sc.nextLine().trim());
-            } catch (Exception ex) {
-                p = -1;
+                prioridadBuscada = Integer.parseInt(scanner.nextLine().trim());
+            } catch (Exception e) {
+                prioridadBuscada = -1;
             }
-            for (Solicitud s : lista) {
-                if (s.prioridad == p) {
-                    String nom = "";
-                    for (Estudiante e : estudiantes) {
-                        if (e.legajo.equals(s.legajo)) {
-                            nom = e.nombre;
+            for (Solicitud solicitud : solicitudes) {
+                if (solicitud.prioridad == prioridadBuscada) {
+                    String nombreEstudiante = "";
+                    for (Estudiante estudiante : estudiantes) {
+                        if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
+                            nombreEstudiante = estudiante.nombre;
                         }
                     }
-                    String pr;
-                    if (s.prioridad == 1) {
-                        pr = "ALTA";
-                    } else if (s.prioridad == 2) {
-                        pr = "MEDIA";
+                    String etiquetaPrioridad;
+                    if (solicitud.prioridad == 1) {
+                        etiquetaPrioridad = "ALTA";
+                    } else if (solicitud.prioridad == 2) {
+                        etiquetaPrioridad = "MEDIA";
                     } else {
-                        pr = "BAJA";
+                        etiquetaPrioridad = "BAJA";
                     }
-                    String linea = "#" + s.id + " [" + s.tipo + "] " + s.desc + " | Estudiante: " + nom + " (" + s.legajo + ")"
-                            + " | Prioridad: " + pr + " | Estado: " + s.estado
-                            + " | Responsable: " + (s.resp == null ? "-" : s.resp.nombre);
-                    if (s.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + s.obs;
+                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
+                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
+                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
+                    if (solicitud.estado.equals("RECHAZADA")) {
+                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
                     }
                     System.out.println(linea);
-                    cont++;
+                    encontradas++;
                 }
             }
         } else {
             System.out.println("Opcion invalida.");
             return;
         }
-        if (cont == 0) {
+        if (encontradas == 0) {
             System.out.println("No se encontraron solicitudes.");
         } else {
-            System.out.println("Se encontraron " + cont + " solicitud(es).");
+            System.out.println("Se encontraron " + encontradas + " solicitud(es).");
         }
     }
 
-    public void listar() {
-        if (lista.size() == 0) {
+    public void listarSolicitudes() {
+        if (solicitudes.size() == 0) {
             System.out.println("No hay solicitudes registradas.");
             return;
         }
-        System.out.println("Listado de solicitudes (" + lista.size() + "):");
-        for (Solicitud s : lista) {
-            String nom = "";
-            for (Estudiante e : estudiantes) {
-                if (e.legajo.equals(s.legajo)) {
-                    nom = e.nombre;
+        System.out.println("Listado de solicitudes (" + solicitudes.size() + "):");
+        for (Solicitud solicitud : solicitudes) {
+            String nombreEstudiante = "";
+            for (Estudiante estudiante : estudiantes) {
+                if (estudiante.legajo.equals(solicitud.legajoEstudiante)) {
+                    nombreEstudiante = estudiante.nombre;
                 }
             }
-            String pr;
-            if (s.prioridad == 1) {
-                pr = "ALTA";
-            } else if (s.prioridad == 2) {
-                pr = "MEDIA";
+            String etiquetaPrioridad;
+            if (solicitud.prioridad == 1) {
+                etiquetaPrioridad = "ALTA";
+            } else if (solicitud.prioridad == 2) {
+                etiquetaPrioridad = "MEDIA";
             } else {
-                pr = "BAJA";
+                etiquetaPrioridad = "BAJA";
             }
-            String linea = "#" + s.id + " [" + s.tipo + "] " + s.desc + " | Estudiante: " + nom + " (" + s.legajo + ")"
-                    + " | Prioridad: " + pr + " | Estado: " + s.estado
-                    + " | Responsable: " + (s.resp == null ? "-" : s.resp.nombre);
-            if (s.estado.equals("RECHAZADA")) {
-                linea = linea + " | Motivo: " + s.obs;
+            String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
+                    + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
+                    + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
+            if (solicitud.estado.equals("RECHAZADA")) {
+                linea = linea + " | Motivo: " + solicitud.motivoRechazo;
             }
             System.out.println(linea);
             //System.out.println(s.id + " - " + s.tipo + " - " + s.estado);
         }
     }
 
-    public void reporte() {
-        int total = lista.size();
-        int c1 = 0, c2 = 0, c3 = 0, c4 = 0;
-        int t1 = 0, t2 = 0, t3 = 0, t4 = 0;
-        int p1 = 0, p2 = 0, p3 = 0;
+    public void generarReporte() {
+        int total = solicitudes.size();
+        int pendientes = 0, enProceso = 0, resueltas = 0, rechazadas = 0;
+        int certificados = 0, equivalencias = 0, cambiosComision = 0, reclamosNota = 0;
+        int prioridadAlta = 0, prioridadMedia = 0, prioridadBaja = 0;
         int altaSinResolver = 0;
-        int sinResp = 0;
-        for (Solicitud s : lista) {
-            if (s.estado.equals("PENDIENTE")) c1++;
-            else if (s.estado.equals("EN_PROCESO")) c2++;
-            else if (s.estado.equals("RESUELTA")) c3++;
-            else if (s.estado.equals("RECHAZADA")) c4++;
+        int sinResponsable = 0;
+        for (Solicitud solicitud : solicitudes) {
+            if (solicitud.estado.equals("PENDIENTE")) pendientes++;
+            else if (solicitud.estado.equals("EN_PROCESO")) enProceso++;
+            else if (solicitud.estado.equals("RESUELTA")) resueltas++;
+            else if (solicitud.estado.equals("RECHAZADA")) rechazadas++;
 
-            if (s.tipo.equals("CERTIFICADO")) t1++;
-            else if (s.tipo.equals("EQUIVALENCIA")) t2++;
-            else if (s.tipo.equals("CAMBIO_COMISION")) t3++;
-            else if (s.tipo.equals("RECLAMO_NOTA")) t4++;
+            if (solicitud.tipo.equals("CERTIFICADO")) certificados++;
+            else if (solicitud.tipo.equals("EQUIVALENCIA")) equivalencias++;
+            else if (solicitud.tipo.equals("CAMBIO_COMISION")) cambiosComision++;
+            else if (solicitud.tipo.equals("RECLAMO_NOTA")) reclamosNota++;
 
-            if (s.prioridad == 1) p1++;
-            else if (s.prioridad == 2) p2++;
-            else p3++;
+            if (solicitud.prioridad == 1) prioridadAlta++;
+            else if (solicitud.prioridad == 2) prioridadMedia++;
+            else prioridadBaja++;
 
-            if (s.prioridad == 1 && (s.estado.equals("PENDIENTE") || s.estado.equals("EN_PROCESO"))) {
+            if (solicitud.prioridad == 1 && (solicitud.estado.equals("PENDIENTE") || solicitud.estado.equals("EN_PROCESO"))) {
                 altaSinResolver++;
             }
-            if (s.resp == null) {
-                sinResp++;
+            if (solicitud.responsable == null) {
+                sinResponsable++;
             }
         }
-        int porc = 0;
+        int porcentajeResueltas = 0;
         if (total > 0) {
-            porc = c3 * 100 / total;
+            porcentajeResueltas = resueltas * 100 / total;
         }
         System.out.println("===== REPORTE DE SOLICITUDES =====");
         System.out.println("Total de solicitudes: " + total);
         System.out.println("Por estado:");
-        System.out.println("  PENDIENTE: " + c1);
-        System.out.println("  EN_PROCESO: " + c2);
-        System.out.println("  RESUELTA: " + c3);
-        System.out.println("  RECHAZADA: " + c4);
+        System.out.println("  PENDIENTE: " + pendientes);
+        System.out.println("  EN_PROCESO: " + enProceso);
+        System.out.println("  RESUELTA: " + resueltas);
+        System.out.println("  RECHAZADA: " + rechazadas);
         System.out.println("Por tipo:");
-        System.out.println("  CERTIFICADO: " + t1);
-        System.out.println("  EQUIVALENCIA: " + t2);
-        System.out.println("  CAMBIO_COMISION: " + t3);
-        System.out.println("  RECLAMO_NOTA: " + t4);
+        System.out.println("  CERTIFICADO: " + certificados);
+        System.out.println("  EQUIVALENCIA: " + equivalencias);
+        System.out.println("  CAMBIO_COMISION: " + cambiosComision);
+        System.out.println("  RECLAMO_NOTA: " + reclamosNota);
         System.out.println("Por prioridad:");
-        System.out.println("  ALTA: " + p1);
-        System.out.println("  MEDIA: " + p2);
-        System.out.println("  BAJA: " + p3);
-        System.out.println("Porcentaje de resueltas: " + porc + "%");
+        System.out.println("  ALTA: " + prioridadAlta);
+        System.out.println("  MEDIA: " + prioridadMedia);
+        System.out.println("  BAJA: " + prioridadBaja);
+        System.out.println("Porcentaje de resueltas: " + porcentajeResueltas + "%");
         System.out.println("Prioridad ALTA sin resolver: " + altaSinResolver);
-        System.out.println("Sin responsable asignado: " + sinResp);
+        System.out.println("Sin responsable asignado: " + sinResponsable);
     }
 
     public Solicitud buscarPorId(int id) {
-        for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).id == id) {
-                return lista.get(i);
+        for (int i = 0; i < solicitudes.size(); i++) {
+            if (solicitudes.get(i).id == id) {
+                return solicitudes.get(i);
             }
         }
         return null;
