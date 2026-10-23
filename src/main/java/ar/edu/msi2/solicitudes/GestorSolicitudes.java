@@ -244,24 +244,7 @@ public class GestorSolicitudes {
             String estadoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
             for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.estado.equals(estadoBuscado)) {
-                    String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
-                            .map(estudiante -> estudiante.nombre)
-                            .orElse("");
-                    String etiquetaPrioridad;
-                    if (solicitud.prioridad == 1) {
-                        etiquetaPrioridad = "ALTA";
-                    } else if (solicitud.prioridad == 2) {
-                        etiquetaPrioridad = "MEDIA";
-                    } else {
-                        etiquetaPrioridad = "BAJA";
-                    }
-                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
-                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
-                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
-                    if (solicitud.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
-                    }
-                    System.out.println(linea);
+                    System.out.println(formatearSolicitud(solicitud));
                     encontradas++;
                 }
             }
@@ -270,24 +253,7 @@ public class GestorSolicitudes {
             String tipoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
             for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.tipo.equals(tipoBuscado)) {
-                    String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
-                            .map(estudiante -> estudiante.nombre)
-                            .orElse("");
-                    String etiquetaPrioridad;
-                    if (solicitud.prioridad == 1) {
-                        etiquetaPrioridad = "ALTA";
-                    } else if (solicitud.prioridad == 2) {
-                        etiquetaPrioridad = "MEDIA";
-                    } else {
-                        etiquetaPrioridad = "BAJA";
-                    }
-                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
-                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
-                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
-                    if (solicitud.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
-                    }
-                    System.out.println(linea);
+                    System.out.println(formatearSolicitud(solicitud));
                     encontradas++;
                 }
             }
@@ -296,24 +262,7 @@ public class GestorSolicitudes {
             String legajoBuscado = scanner.nextLine().trim();
             for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.legajoEstudiante.equals(legajoBuscado)) {
-                    String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
-                            .map(estudiante -> estudiante.nombre)
-                            .orElse("");
-                    String etiquetaPrioridad;
-                    if (solicitud.prioridad == 1) {
-                        etiquetaPrioridad = "ALTA";
-                    } else if (solicitud.prioridad == 2) {
-                        etiquetaPrioridad = "MEDIA";
-                    } else {
-                        etiquetaPrioridad = "BAJA";
-                    }
-                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
-                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
-                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
-                    if (solicitud.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
-                    }
-                    System.out.println(linea);
+                    System.out.println(formatearSolicitud(solicitud));
                     encontradas++;
                 }
             }
@@ -321,24 +270,7 @@ public class GestorSolicitudes {
             int prioridadBuscada = leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): ");
             for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.prioridad == prioridadBuscada) {
-                    String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
-                            .map(estudiante -> estudiante.nombre)
-                            .orElse("");
-                    String etiquetaPrioridad;
-                    if (solicitud.prioridad == 1) {
-                        etiquetaPrioridad = "ALTA";
-                    } else if (solicitud.prioridad == 2) {
-                        etiquetaPrioridad = "MEDIA";
-                    } else {
-                        etiquetaPrioridad = "BAJA";
-                    }
-                    String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
-                            + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
-                            + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
-                    if (solicitud.estado.equals("RECHAZADA")) {
-                        linea = linea + " | Motivo: " + solicitud.motivoRechazo;
-                    }
-                    System.out.println(linea);
+                    System.out.println(formatearSolicitud(solicitud));
                     encontradas++;
                 }
             }
@@ -361,24 +293,7 @@ public class GestorSolicitudes {
         }
         System.out.println("Listado de solicitudes (" + solicitudes.size() + "):");
         for (Solicitud solicitud : solicitudes) {
-            String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
-                    .map(estudiante -> estudiante.nombre)
-                    .orElse("");
-            String etiquetaPrioridad;
-            if (solicitud.prioridad == 1) {
-                etiquetaPrioridad = "ALTA";
-            } else if (solicitud.prioridad == 2) {
-                etiquetaPrioridad = "MEDIA";
-            } else {
-                etiquetaPrioridad = "BAJA";
-            }
-            String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
-                    + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
-                    + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
-            if (solicitud.estado.equals("RECHAZADA")) {
-                linea = linea + " | Motivo: " + solicitud.motivoRechazo;
-            }
-            System.out.println(linea);
+            System.out.println(formatearSolicitud(solicitud));
         }
     }
 
@@ -435,6 +350,27 @@ public class GestorSolicitudes {
         System.out.println("Porcentaje de resueltas: " + porcentajeResueltas + "%");
         System.out.println("Prioridad ALTA sin resolver: " + altaSinResolver);
         System.out.println("Sin responsable asignado: " + sinResponsable);
+    }
+
+    private String formatearSolicitud(Solicitud solicitud) {
+        String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
+                .map(estudiante -> estudiante.nombre)
+                .orElse("");
+        String etiquetaPrioridad;
+        if (solicitud.prioridad == 1) {
+            etiquetaPrioridad = "ALTA";
+        } else if (solicitud.prioridad == 2) {
+            etiquetaPrioridad = "MEDIA";
+        } else {
+            etiquetaPrioridad = "BAJA";
+        }
+        String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
+                + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
+                + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
+        if (solicitud.estado.equals("RECHAZADA")) {
+            linea = linea + " | Motivo: " + solicitud.motivoRechazo;
+        }
+        return linea;
     }
 
     private int leerEntero(String mensaje) {
