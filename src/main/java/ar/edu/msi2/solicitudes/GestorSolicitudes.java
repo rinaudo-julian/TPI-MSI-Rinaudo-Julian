@@ -7,6 +7,7 @@ import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class GestorSolicitudes {
 
@@ -238,50 +239,40 @@ public class GestorSolicitudes {
         System.out.println("4. Prioridad");
         int opcionFiltro = leerEntero("Opcion: ");
 
-        int encontradas = 0;
+        Predicate<Solicitud> criterio;
         if (opcionFiltro == 1) {
             System.out.print("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ");
             String estadoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
-            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
-                if (solicitud.estado.equals(estadoBuscado)) {
-                    System.out.println(formatearSolicitud(solicitud));
-                    encontradas++;
-                }
-            }
+            criterio = solicitud -> solicitud.estado.equals(estadoBuscado);
         } else if (opcionFiltro == 2) {
             System.out.print("Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): ");
             String tipoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
-            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
-                if (solicitud.tipo.equals(tipoBuscado)) {
-                    System.out.println(formatearSolicitud(solicitud));
-                    encontradas++;
-                }
-            }
+            criterio = solicitud -> solicitud.tipo.equals(tipoBuscado);
         } else if (opcionFiltro == 3) {
             System.out.print("Legajo: ");
             String legajoBuscado = scanner.nextLine().trim();
-            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
-                if (solicitud.legajoEstudiante.equals(legajoBuscado)) {
-                    System.out.println(formatearSolicitud(solicitud));
-                    encontradas++;
-                }
-            }
+            criterio = solicitud -> solicitud.legajoEstudiante.equals(legajoBuscado);
         } else if (opcionFiltro == 4) {
             int prioridadBuscada = leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): ");
-            for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
-                if (solicitud.prioridad == prioridadBuscada) {
-                    System.out.println(formatearSolicitud(solicitud));
-                    encontradas++;
-                }
-            }
+            criterio = solicitud -> solicitud.prioridad == prioridadBuscada;
         } else {
             System.out.println("Opcion invalida.");
             return;
         }
-        if (encontradas == 0) {
+        mostrarSolicitudesQueCumplen(criterio);
+    }
+
+    private void mostrarSolicitudesQueCumplen(Predicate<Solicitud> criterio) {
+        List<Solicitud> encontradas = repositorioSolicitudes.buscarTodas().stream()
+                .filter(criterio)
+                .toList();
+        for (Solicitud solicitud : encontradas) {
+            System.out.println(formatearSolicitud(solicitud));
+        }
+        if (encontradas.isEmpty()) {
             System.out.println("No se encontraron solicitudes.");
         } else {
-            System.out.println("Se encontraron " + encontradas + " solicitud(es).");
+            System.out.println("Se encontraron " + encontradas.size() + " solicitud(es).");
         }
     }
 
