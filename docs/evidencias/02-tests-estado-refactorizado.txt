@@ -1,0 +1,25 @@
+# Ejecucion de la suite completa sobre la version refactorizada
+# Comando: mvn test
+# Fecha: 2026-10-22 21:41
+# Commit: 74097d6
+
+[INFO] Running ar.edu.msi2.solicitudes.servicio.ServicioSolicitudesTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.064 s -- in ar.edu.msi2.solicitudes.servicio.ServicioSolicitudesTest
+[INFO] Running ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudesEnMemoriaTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudesEnMemoriaTest
+[INFO] Running ar.edu.msi2.solicitudes.consola.MenuConsolaTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.038 s -- in ar.edu.msi2.solicitudes.consola.MenuConsolaTest
+[INFO] Running ar.edu.msi2.solicitudes.dominio.TipoSolicitudTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.084 s -- in ar.edu.msi2.solicitudes.dominio.TipoSolicitudTest
+[INFO] Running ar.edu.msi2.solicitudes.dominio.SolicitudTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.026 s -- in ar.edu.msi2.solicitudes.dominio.SolicitudTest
+[INFO] Running ar.edu.msi2.solicitudes.dominio.EstadoSolicitudTest
+[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.048 s -- in ar.edu.msi2.solicitudes.dominio.EstadoSolicitudTest
+[INFO] Running ar.edu.msi2.solicitudes.CaracterizacionTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.095 s -- in ar.edu.msi2.solicitudes.CaracterizacionTest
+[INFO] Tests run: 63, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+
+# Los archivos esperados (.out) de los tests de caracterizacion NO cambiaron desde etapa-diagnostico:
+# Comando: git diff --stat etapa-diagnostico HEAD -- src/test/resources/caracterizacion
+(sin diferencias)
