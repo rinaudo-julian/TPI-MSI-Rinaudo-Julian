@@ -6,6 +6,8 @@
 
 Las referencias `Archivo:línea` corresponden al código del tag `estado-inicial`.
 
+> El estado de resolución de cada problema después del refactoring está en [`registro-refactorings.md`](registro-refactorings.md#2-estado-de-cada-problema-del-diagnóstico).
+
 ---
 
 ## 1. Calidad externa vs. calidad interna
