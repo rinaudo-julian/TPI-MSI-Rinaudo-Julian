@@ -13,7 +13,7 @@ public class RepositorioEstudiantesEnMemoria implements RepositorioEstudiantes {
     @Override
     public Estudiante guardar(Estudiante estudiante) {
         for (int i = 0; i < estudiantes.size(); i++) {
-            if (estudiantes.get(i).legajo.equals(estudiante.legajo)) {
+            if (estudiantes.get(i).getLegajo().equals(estudiante.getLegajo())) {
                 estudiantes.set(i, estudiante);
                 return estudiante;
             }
@@ -25,7 +25,7 @@ public class RepositorioEstudiantesEnMemoria implements RepositorioEstudiantes {
     @Override
     public Optional<Estudiante> buscarPorLegajo(String legajo) {
         return estudiantes.stream()
-                .filter(estudiante -> estudiante.legajo.equals(legajo))
+                .filter(estudiante -> estudiante.getLegajo().equals(legajo))
                 .findFirst();
     }
 
@@ -36,6 +36,6 @@ public class RepositorioEstudiantesEnMemoria implements RepositorioEstudiantes {
 
     @Override
     public void eliminar(String legajo) {
-        estudiantes.removeIf(estudiante -> estudiante.legajo.equals(legajo));
+        estudiantes.removeIf(estudiante -> estudiante.getLegajo().equals(legajo));
     }
 }

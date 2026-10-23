@@ -13,14 +13,14 @@ public class RepositorioResponsablesEnMemoria implements RepositorioResponsables
 
     @Override
     public Responsable guardar(Responsable responsable) {
-        if (responsable.id == 0) {
+        if (responsable.getId() == 0) {
             ultimoId++;
-            responsable.id = ultimoId;
+            responsable.asignarId(ultimoId);
             responsables.add(responsable);
             return responsable;
         }
         for (int i = 0; i < responsables.size(); i++) {
-            if (responsables.get(i).id == responsable.id) {
+            if (responsables.get(i).getId() == responsable.getId()) {
                 responsables.set(i, responsable);
                 return responsable;
             }
@@ -32,7 +32,7 @@ public class RepositorioResponsablesEnMemoria implements RepositorioResponsables
     @Override
     public Optional<Responsable> buscarPorId(int id) {
         return responsables.stream()
-                .filter(responsable -> responsable.id == id)
+                .filter(responsable -> responsable.getId() == id)
                 .findFirst();
     }
 
@@ -43,6 +43,6 @@ public class RepositorioResponsablesEnMemoria implements RepositorioResponsables
 
     @Override
     public void eliminar(int id) {
-        responsables.removeIf(responsable -> responsable.id == id);
+        responsables.removeIf(responsable -> responsable.getId() == id);
     }
 }

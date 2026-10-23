@@ -27,38 +27,21 @@ public class DatosDePrueba {
         repositorioResponsables.guardar(new Responsable("Marcos Ruiz", Area.ALUMNADO));
         Responsable silvia = repositorioResponsables.guardar(new Responsable("Silvia Torres", Area.DEPARTAMENTO_ACADEMICO));
 
-        Solicitud certificado = new Solicitud();
-        certificado.legajoEstudiante = "1001";
-        certificado.tipo = TipoSolicitud.CERTIFICADO;
-        certificado.descripcion = "Certificado de alumno regular";
-        certificado.prioridad = Prioridad.BAJA;
-        certificado.estado = EstadoSolicitud.PENDIENTE;
-        repositorioSolicitudes.guardar(certificado);
+        repositorioSolicitudes.guardar(
+                new Solicitud("1001", TipoSolicitud.CERTIFICADO, "Certificado de alumno regular", Prioridad.BAJA));
 
-        Solicitud equivalencia = new Solicitud();
-        equivalencia.legajoEstudiante = "1002";
-        equivalencia.tipo = TipoSolicitud.EQUIVALENCIA;
-        equivalencia.descripcion = "Equivalencia de Algebra";
-        equivalencia.prioridad = Prioridad.MEDIA;
-        equivalencia.estado = EstadoSolicitud.EN_PROCESO;
-        equivalencia.responsable = silvia;
+        Solicitud equivalencia = new Solicitud("1002", TipoSolicitud.EQUIVALENCIA, "Equivalencia de Algebra", Prioridad.MEDIA);
+        equivalencia.asignarResponsable(silvia);
+        equivalencia.cambiarEstado(EstadoSolicitud.EN_PROCESO);
         repositorioSolicitudes.guardar(equivalencia);
 
-        Solicitud reclamoNota = new Solicitud();
-        reclamoNota.legajoEstudiante = "1003";
-        reclamoNota.tipo = TipoSolicitud.RECLAMO_NOTA;
-        reclamoNota.descripcion = "Revision de nota del parcial de Contabilidad";
-        reclamoNota.prioridad = Prioridad.ALTA;
-        reclamoNota.estado = EstadoSolicitud.PENDIENTE;
-        repositorioSolicitudes.guardar(reclamoNota);
+        repositorioSolicitudes.guardar(
+                new Solicitud("1003", TipoSolicitud.RECLAMO_NOTA, "Revision de nota del parcial de Contabilidad", Prioridad.ALTA));
 
-        Solicitud cambioComision = new Solicitud();
-        cambioComision.legajoEstudiante = "1001";
-        cambioComision.tipo = TipoSolicitud.CAMBIO_COMISION;
-        cambioComision.descripcion = "Cambio a comision noche";
-        cambioComision.prioridad = Prioridad.MEDIA;
-        cambioComision.estado = EstadoSolicitud.RESUELTA;
-        cambioComision.responsable = laura;
+        Solicitud cambioComision = new Solicitud("1001", TipoSolicitud.CAMBIO_COMISION, "Cambio a comision noche", Prioridad.MEDIA);
+        cambioComision.asignarResponsable(laura);
+        cambioComision.cambiarEstado(EstadoSolicitud.EN_PROCESO);
+        cambioComision.cambiarEstado(EstadoSolicitud.RESUELTA);
         repositorioSolicitudes.guardar(cambioComision);
     }
 }

@@ -13,14 +13,14 @@ public class RepositorioSolicitudesEnMemoria implements RepositorioSolicitudes {
 
     @Override
     public Solicitud guardar(Solicitud solicitud) {
-        if (solicitud.id == 0) {
+        if (solicitud.getId() == 0) {
             ultimoId++;
-            solicitud.id = ultimoId;
+            solicitud.asignarId(ultimoId);
             solicitudes.add(solicitud);
             return solicitud;
         }
         for (int i = 0; i < solicitudes.size(); i++) {
-            if (solicitudes.get(i).id == solicitud.id) {
+            if (solicitudes.get(i).getId() == solicitud.getId()) {
                 solicitudes.set(i, solicitud);
                 return solicitud;
             }
@@ -32,7 +32,7 @@ public class RepositorioSolicitudesEnMemoria implements RepositorioSolicitudes {
     @Override
     public Optional<Solicitud> buscarPorId(int id) {
         return solicitudes.stream()
-                .filter(solicitud -> solicitud.id == id)
+                .filter(solicitud -> solicitud.getId() == id)
                 .findFirst();
     }
 
@@ -43,6 +43,6 @@ public class RepositorioSolicitudesEnMemoria implements RepositorioSolicitudes {
 
     @Override
     public void eliminar(int id) {
-        solicitudes.removeIf(solicitud -> solicitud.id == id);
+        solicitudes.removeIf(solicitud -> solicitud.getId() == id);
     }
 }
