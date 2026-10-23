@@ -134,18 +134,7 @@ public class GestorSolicitudes {
         }
         EstadoSolicitud estadoNuevo = estadoElegido.get();
 
-        // validar transicion
-        boolean transicionValida = false;
-        if (solicitud.estado == EstadoSolicitud.PENDIENTE) {
-            if (estadoNuevo == EstadoSolicitud.EN_PROCESO || estadoNuevo == EstadoSolicitud.RECHAZADA) {
-                transicionValida = true;
-            }
-        } else if (solicitud.estado == EstadoSolicitud.EN_PROCESO) {
-            if (estadoNuevo == EstadoSolicitud.RESUELTA || estadoNuevo == EstadoSolicitud.RECHAZADA) {
-                transicionValida = true;
-            }
-        }
-        if (!transicionValida) {
+        if (!solicitud.estado.puedePasarA(estadoNuevo)) {
             System.out.println("Error: no se puede pasar de " + solicitud.estado + " a " + estadoNuevo);
             return;
         }
@@ -178,7 +167,7 @@ public class GestorSolicitudes {
             return;
         }
         Solicitud solicitud = solicitudEncontrada.get();
-        if (solicitud.estado == EstadoSolicitud.RESUELTA || solicitud.estado == EstadoSolicitud.RECHAZADA) {
+        if (solicitud.estado.estaCerrado()) {
             System.out.println("Error: no se puede asignar responsable a una solicitud cerrada");
             return;
         }
@@ -195,13 +184,7 @@ public class GestorSolicitudes {
         }
         Responsable responsable = responsableEncontrado.get();
 
-        // cada area atiende ciertos tipos
-        Area areaNecesaria;
-        if (solicitud.tipo == TipoSolicitud.CERTIFICADO || solicitud.tipo == TipoSolicitud.CAMBIO_COMISION) {
-            areaNecesaria = Area.ALUMNADO;
-        } else {
-            areaNecesaria = Area.DEPARTAMENTO_ACADEMICO;
-        }
+        Area areaNecesaria = solicitud.tipo.getAreaResponsable();
         if (responsable.area != areaNecesaria) {
             System.out.println("Error: las solicitudes de tipo " + solicitud.tipo + " las atiende el area " + areaNecesaria.getNombre());
             return;
@@ -291,7 +274,7 @@ public class GestorSolicitudes {
             else if (solicitud.prioridad == Prioridad.MEDIA) prioridadMedia++;
             else prioridadBaja++;
 
-            if (solicitud.prioridad == Prioridad.ALTA && (solicitud.estado == EstadoSolicitud.PENDIENTE || solicitud.estado == EstadoSolicitud.EN_PROCESO)) {
+            if (solicitud.prioridad == Prioridad.ALTA && !solicitud.estado.estaCerrado()) {
                 altaSinResolver++;
             }
             if (solicitud.responsable == null) {
