@@ -1,30 +1,18 @@
 package ar.edu.msi2.solicitudes;
 
-import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantes;
-import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsables;
-import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;
-
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class GestorSolicitudes {
 
-    private final RepositorioSolicitudes repositorioSolicitudes;
-    private final RepositorioEstudiantes repositorioEstudiantes;
-    private final RepositorioResponsables repositorioResponsables;
+    private final ServicioSolicitudes servicio;
     Scanner scanner = new Scanner(System.in);
 
-    public GestorSolicitudes(RepositorioSolicitudes repositorioSolicitudes,
-                             RepositorioEstudiantes repositorioEstudiantes,
-                             RepositorioResponsables repositorioResponsables) {
-        this.repositorioSolicitudes = repositorioSolicitudes;
-        this.repositorioEstudiantes = repositorioEstudiantes;
-        this.repositorioResponsables = repositorioResponsables;
+    public GestorSolicitudes(ServicioSolicitudes servicio) {
+        this.servicio = servicio;
     }
 
     public void mostrarMenu() {
@@ -60,7 +48,7 @@ public class GestorSolicitudes {
         } else if (opcion == 5) {
             listarSolicitudes();
         } else if (opcion == 6) {
-            generarReporte();
+            mostrarReporte();
         } else if (opcion == 0) {
             System.out.println("Hasta luego.");
         } else {
@@ -68,11 +56,10 @@ public class GestorSolicitudes {
         }
     }
 
-    public void registrarSolicitud() {
+    private void registrarSolicitud() {
         System.out.print("Legajo del estudiante: ");
         String legajo = scanner.nextLine().trim();
-        Estudiante estudiante = repositorioEstudiantes.buscarPorLegajo(legajo)
-                .orElseThrow(() -> new ReglaDeNegocioException("no existe un estudiante con legajo " + legajo));
+        Estudiante estudiante = servicio.buscarEstudiante(legajo);
 
         System.out.println("Tipo de solicitud:");
         System.out.println("1. Certificado");
@@ -86,26 +73,15 @@ public class GestorSolicitudes {
         String descripcion = scanner.nextLine().trim();
         Solicitud.validarDescripcion(descripcion);
 
-        Prioridad prioridadIngresada = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "))
+        Prioridad prioridad = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "))
                 .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
 
-        Solicitud solicitud = new Solicitud(legajo, tipo, descripcion, prioridadSegunPolitica(tipo, prioridadIngresada));
-        repositorioSolicitudes.guardar(solicitud);
+        Solicitud solicitud = servicio.registrarSolicitud(legajo, tipo, descripcion, prioridad);
         System.out.println("Solicitud registrada con ID " + solicitud.getId() + " para " + estudiante.getNombre() + ".");
     }
 
-    /**
-     * Los reclamos de nota siempre van con prioridad alta (pedido de secretaria).
-     */
-    private Prioridad prioridadSegunPolitica(TipoSolicitud tipo, Prioridad prioridadIngresada) {
-        if (tipo == TipoSolicitud.RECLAMO_NOTA) {
-            return Prioridad.ALTA;
-        }
-        return prioridadIngresada;
-    }
-
-    public void cambiarEstado() {
-        Solicitud solicitud = buscarSolicitud(leerEntero("ID de la solicitud: "));
+    private void cambiarEstado() {
+        Solicitud solicitud = servicio.buscarSolicitud(leerEntero("ID de la solicitud: "));
 
         System.out.println("Estado actual: " + solicitud.getEstado());
         System.out.println("Nuevo estado:");
@@ -120,35 +96,28 @@ public class GestorSolicitudes {
         EstadoSolicitud estadoAnterior = solicitud.getEstado();
         if (estadoNuevo == EstadoSolicitud.RECHAZADA) {
             System.out.print("Motivo del rechazo: ");
-            solicitud.rechazar(scanner.nextLine().trim());
+            servicio.rechazar(solicitud.getId(), scanner.nextLine().trim());
         } else {
-            solicitud.cambiarEstado(estadoNuevo);
+            servicio.cambiarEstado(solicitud.getId(), estadoNuevo);
         }
         System.out.println("Solicitud " + solicitud.getId() + ": " + estadoAnterior + " -> " + estadoNuevo);
     }
 
-    public void asignarResponsable() {
-        Solicitud solicitud = buscarSolicitud(leerEntero("ID de la solicitud: "));
+    private void asignarResponsable() {
+        Solicitud solicitud = servicio.buscarSolicitud(leerEntero("ID de la solicitud: "));
         solicitud.verificarQueAdmiteResponsable();
 
         System.out.println("Responsables disponibles:");
-        for (Responsable disponible : repositorioResponsables.buscarTodos()) {
+        for (Responsable disponible : servicio.listarResponsables()) {
             System.out.println(disponible.getId() + ". " + disponible.getNombre() + " (" + disponible.getArea().getNombre() + ")");
         }
         int idResponsable = leerEntero("ID del responsable: ");
-        Responsable responsable = repositorioResponsables.buscarPorId(idResponsable)
-                .orElseThrow(() -> new ReglaDeNegocioException("no existe el responsable " + idResponsable));
 
-        solicitud.asignarResponsable(responsable);
-        System.out.println("Responsable " + responsable.getNombre() + " asignado a la solicitud " + solicitud.getId() + ".");
+        Solicitud actualizada = servicio.asignarResponsable(solicitud.getId(), idResponsable);
+        System.out.println("Responsable " + actualizada.getResponsable().getNombre() + " asignado a la solicitud " + actualizada.getId() + ".");
     }
 
-    private Solicitud buscarSolicitud(int id) {
-        return repositorioSolicitudes.buscarPorId(id)
-                .orElseThrow(() -> new ReglaDeNegocioException("no existe la solicitud " + id));
-    }
-
-    public void buscarSolicitudes() {
+    private void buscarSolicitudes() {
         System.out.println("Buscar por:");
         System.out.println("1. Estado");
         System.out.println("2. Tipo");
@@ -159,11 +128,11 @@ public class GestorSolicitudes {
         Predicate<Solicitud> criterio;
         if (opcionFiltro == 1) {
             System.out.print("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ");
-            String estadoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
+            String estadoBuscado = leerCodigo();
             criterio = solicitud -> solicitud.getEstado().name().equals(estadoBuscado);
         } else if (opcionFiltro == 2) {
             System.out.print("Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): ");
-            String tipoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
+            String tipoBuscado = leerCodigo();
             criterio = solicitud -> solicitud.getTipo().name().equals(tipoBuscado);
         } else if (opcionFiltro == 3) {
             System.out.print("Legajo: ");
@@ -176,13 +145,10 @@ public class GestorSolicitudes {
             System.out.println("Opcion invalida.");
             return;
         }
-        mostrarSolicitudesQueCumplen(criterio);
+        mostrarResultadoBusqueda(servicio.buscarSolicitudes(criterio));
     }
 
-    private void mostrarSolicitudesQueCumplen(Predicate<Solicitud> criterio) {
-        List<Solicitud> encontradas = repositorioSolicitudes.buscarTodas().stream()
-                .filter(criterio)
-                .toList();
+    private void mostrarResultadoBusqueda(List<Solicitud> encontradas) {
         for (Solicitud solicitud : encontradas) {
             System.out.println(formatearSolicitud(solicitud));
         }
@@ -193,8 +159,8 @@ public class GestorSolicitudes {
         }
     }
 
-    public void listarSolicitudes() {
-        List<Solicitud> solicitudes = repositorioSolicitudes.buscarTodas();
+    private void listarSolicitudes() {
+        List<Solicitud> solicitudes = servicio.listarSolicitudes();
         if (solicitudes.isEmpty()) {
             System.out.println("No hay solicitudes registradas.");
             return;
@@ -205,38 +171,16 @@ public class GestorSolicitudes {
         }
     }
 
-    public void generarReporte() {
-        List<Solicitud> solicitudes = repositorioSolicitudes.buscarTodas();
-        Map<EstadoSolicitud, Long> porEstado = contarPor(solicitudes, EstadoSolicitud.class, Solicitud::getEstado);
-        Map<TipoSolicitud, Long> porTipo = contarPor(solicitudes, TipoSolicitud.class, Solicitud::getTipo);
-        Map<Prioridad, Long> porPrioridad = contarPor(solicitudes, Prioridad.class, Solicitud::getPrioridad);
-        long altaSinResolver = solicitudes.stream().filter(Solicitud::esAltaSinResolver).count();
-        long sinResponsable = solicitudes.stream().filter(solicitud -> !solicitud.tieneResponsable()).count();
-
+    private void mostrarReporte() {
+        ReporteSolicitudes reporte = servicio.generarReporte();
         System.out.println("===== REPORTE DE SOLICITUDES =====");
-        System.out.println("Total de solicitudes: " + solicitudes.size());
-        imprimirConteo("Por estado:", porEstado);
-        imprimirConteo("Por tipo:", porTipo);
-        imprimirConteo("Por prioridad:", porPrioridad);
-        System.out.println("Porcentaje de resueltas: " + porcentaje(porEstado.get(EstadoSolicitud.RESUELTA), solicitudes.size()) + "%");
-        System.out.println("Prioridad ALTA sin resolver: " + altaSinResolver);
-        System.out.println("Sin responsable asignado: " + sinResponsable);
-    }
-
-    /**
-     * Cuenta las solicitudes por cada valor del enum, incluyendo los valores sin solicitudes (con 0).
-     * El EnumMap mantiene el orden de declaracion del enum.
-     */
-    private static <E extends Enum<E>> Map<E, Long> contarPor(List<Solicitud> solicitudes, Class<E> tipoEnum,
-                                                            Function<Solicitud, E> clasificador) {
-        Map<E, Long> conteo = new EnumMap<>(tipoEnum);
-        for (E valor : tipoEnum.getEnumConstants()) {
-            conteo.put(valor, 0L);
-        }
-        for (Solicitud solicitud : solicitudes) {
-            conteo.merge(clasificador.apply(solicitud), 1L, Long::sum);
-        }
-        return conteo;
+        System.out.println("Total de solicitudes: " + reporte.total());
+        imprimirConteo("Por estado:", reporte.porEstado());
+        imprimirConteo("Por tipo:", reporte.porTipo());
+        imprimirConteo("Por prioridad:", reporte.porPrioridad());
+        System.out.println("Porcentaje de resueltas: " + reporte.porcentajeResueltas() + "%");
+        System.out.println("Prioridad ALTA sin resolver: " + reporte.altaSinResolver());
+        System.out.println("Sin responsable asignado: " + reporte.sinResponsable());
     }
 
     private void imprimirConteo(String titulo, Map<? extends Enum<?>, Long> conteo) {
@@ -246,15 +190,8 @@ public class GestorSolicitudes {
         }
     }
 
-    private static long porcentaje(long parte, int total) {
-        if (total == 0) {
-            return 0;
-        }
-        return parte * 100 / total;
-    }
-
     private String formatearSolicitud(Solicitud solicitud) {
-        String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.getLegajoEstudiante())
+        String nombreEstudiante = servicio.estudianteDe(solicitud)
                 .map(Estudiante::getNombre)
                 .orElse("");
         String linea = "#" + solicitud.getId() + " [" + solicitud.getTipo() + "] " + solicitud.getDescripcion()
@@ -294,6 +231,13 @@ public class GestorSolicitudes {
             case 3 -> Optional.of(Prioridad.BAJA);
             default -> Optional.empty();
         };
+    }
+
+    /**
+     * Lee un texto y lo normaliza al formato de los nombres de los enums: "en proceso" -> "EN_PROCESO".
+     */
+    private String leerCodigo() {
+        return scanner.nextLine().trim().toUpperCase().replace(" ", "_");
     }
 
     private int leerEntero(String mensaje) {

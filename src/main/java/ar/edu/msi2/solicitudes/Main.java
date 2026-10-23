@@ -15,7 +15,8 @@ public class Main {
 
         new DatosDePrueba(repositorioSolicitudes, repositorioEstudiantes, repositorioResponsables).cargar();
 
-        GestorSolicitudes gestor = new GestorSolicitudes(repositorioSolicitudes, repositorioEstudiantes, repositorioResponsables);
+        ServicioSolicitudes servicio = new ServicioSolicitudes(repositorioSolicitudes, repositorioEstudiantes, repositorioResponsables);
+        GestorSolicitudes gestor = new GestorSolicitudes(servicio);
         gestor.mostrarMenu();
     }
 }
