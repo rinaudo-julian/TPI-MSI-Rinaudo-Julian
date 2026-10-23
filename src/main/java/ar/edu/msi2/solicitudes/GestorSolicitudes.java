@@ -4,9 +4,12 @@ import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantes;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsables;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class GestorSolicitudes {
@@ -204,57 +207,50 @@ public class GestorSolicitudes {
 
     public void generarReporte() {
         List<Solicitud> solicitudes = repositorioSolicitudes.buscarTodas();
-        int total = solicitudes.size();
-        int pendientes = 0, enProceso = 0, resueltas = 0, rechazadas = 0;
-        int certificados = 0, equivalencias = 0, cambiosComision = 0, reclamosNota = 0;
-        int prioridadAlta = 0, prioridadMedia = 0, prioridadBaja = 0;
-        int altaSinResolver = 0;
-        int sinResponsable = 0;
-        for (Solicitud solicitud : solicitudes) {
-            if (solicitud.getEstado() == EstadoSolicitud.PENDIENTE) pendientes++;
-            else if (solicitud.getEstado() == EstadoSolicitud.EN_PROCESO) enProceso++;
-            else if (solicitud.getEstado() == EstadoSolicitud.RESUELTA) resueltas++;
-            else if (solicitud.getEstado() == EstadoSolicitud.RECHAZADA) rechazadas++;
+        Map<EstadoSolicitud, Long> porEstado = contarPor(solicitudes, EstadoSolicitud.class, Solicitud::getEstado);
+        Map<TipoSolicitud, Long> porTipo = contarPor(solicitudes, TipoSolicitud.class, Solicitud::getTipo);
+        Map<Prioridad, Long> porPrioridad = contarPor(solicitudes, Prioridad.class, Solicitud::getPrioridad);
+        long altaSinResolver = solicitudes.stream().filter(Solicitud::esAltaSinResolver).count();
+        long sinResponsable = solicitudes.stream().filter(solicitud -> !solicitud.tieneResponsable()).count();
 
-            if (solicitud.getTipo() == TipoSolicitud.CERTIFICADO) certificados++;
-            else if (solicitud.getTipo() == TipoSolicitud.EQUIVALENCIA) equivalencias++;
-            else if (solicitud.getTipo() == TipoSolicitud.CAMBIO_COMISION) cambiosComision++;
-            else if (solicitud.getTipo() == TipoSolicitud.RECLAMO_NOTA) reclamosNota++;
-
-            if (solicitud.getPrioridad() == Prioridad.ALTA) prioridadAlta++;
-            else if (solicitud.getPrioridad() == Prioridad.MEDIA) prioridadMedia++;
-            else prioridadBaja++;
-
-            if (solicitud.esAltaSinResolver()) {
-                altaSinResolver++;
-            }
-            if (!solicitud.tieneResponsable()) {
-                sinResponsable++;
-            }
-        }
-        int porcentajeResueltas = 0;
-        if (total > 0) {
-            porcentajeResueltas = resueltas * 100 / total;
-        }
         System.out.println("===== REPORTE DE SOLICITUDES =====");
-        System.out.println("Total de solicitudes: " + total);
-        System.out.println("Por estado:");
-        System.out.println("  PENDIENTE: " + pendientes);
-        System.out.println("  EN_PROCESO: " + enProceso);
-        System.out.println("  RESUELTA: " + resueltas);
-        System.out.println("  RECHAZADA: " + rechazadas);
-        System.out.println("Por tipo:");
-        System.out.println("  CERTIFICADO: " + certificados);
-        System.out.println("  EQUIVALENCIA: " + equivalencias);
-        System.out.println("  CAMBIO_COMISION: " + cambiosComision);
-        System.out.println("  RECLAMO_NOTA: " + reclamosNota);
-        System.out.println("Por prioridad:");
-        System.out.println("  ALTA: " + prioridadAlta);
-        System.out.println("  MEDIA: " + prioridadMedia);
-        System.out.println("  BAJA: " + prioridadBaja);
-        System.out.println("Porcentaje de resueltas: " + porcentajeResueltas + "%");
+        System.out.println("Total de solicitudes: " + solicitudes.size());
+        imprimirConteo("Por estado:", porEstado);
+        imprimirConteo("Por tipo:", porTipo);
+        imprimirConteo("Por prioridad:", porPrioridad);
+        System.out.println("Porcentaje de resueltas: " + porcentaje(porEstado.get(EstadoSolicitud.RESUELTA), solicitudes.size()) + "%");
         System.out.println("Prioridad ALTA sin resolver: " + altaSinResolver);
         System.out.println("Sin responsable asignado: " + sinResponsable);
+    }
+
+    /**
+     * Cuenta las solicitudes por cada valor del enum, incluyendo los valores sin solicitudes (con 0).
+     * El EnumMap mantiene el orden de declaracion del enum.
+     */
+    private static <E extends Enum<E>> Map<E, Long> contarPor(List<Solicitud> solicitudes, Class<E> tipoEnum,
+                                                            Function<Solicitud, E> clasificador) {
+        Map<E, Long> conteo = new EnumMap<>(tipoEnum);
+        for (E valor : tipoEnum.getEnumConstants()) {
+            conteo.put(valor, 0L);
+        }
+        for (Solicitud solicitud : solicitudes) {
+            conteo.merge(clasificador.apply(solicitud), 1L, Long::sum);
+        }
+        return conteo;
+    }
+
+    private void imprimirConteo(String titulo, Map<? extends Enum<?>, Long> conteo) {
+        System.out.println(titulo);
+        for (Map.Entry<? extends Enum<?>, Long> entrada : conteo.entrySet()) {
+            System.out.println("  " + entrada.getKey() + ": " + entrada.getValue());
+        }
+    }
+
+    private static long porcentaje(long parte, int total) {
+        if (total == 0) {
+            return 0;
+        }
+        return parte * 100 / total;
     }
 
     private String formatearSolicitud(Solicitud solicitud) {
