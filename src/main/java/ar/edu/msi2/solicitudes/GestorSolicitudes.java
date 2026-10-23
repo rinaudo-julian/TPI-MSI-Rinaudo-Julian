@@ -72,20 +72,12 @@ public class GestorSolicitudes {
         System.out.println("2. Equivalencia");
         System.out.println("3. Cambio de comision");
         System.out.println("4. Reclamo de nota");
-        int opcionTipo = leerEntero("Opcion: ");
-        String tipo = "";
-        if (opcionTipo == 1) {
-            tipo = "CERTIFICADO";
-        } else if (opcionTipo == 2) {
-            tipo = "EQUIVALENCIA";
-        } else if (opcionTipo == 3) {
-            tipo = "CAMBIO_COMISION";
-        } else if (opcionTipo == 4) {
-            tipo = "RECLAMO_NOTA";
-        } else {
+        Optional<TipoSolicitud> tipoElegido = tipoSegunOpcion(leerEntero("Opcion: "));
+        if (tipoElegido.isEmpty()) {
             System.out.println("Error: tipo invalido");
             return;
         }
+        TipoSolicitud tipo = tipoElegido.get();
 
         System.out.print("Descripcion: ");
         String descripcion = scanner.nextLine().trim();
@@ -98,15 +90,16 @@ public class GestorSolicitudes {
             return;
         }
 
-        int prioridad = leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): ");
-        if (prioridad < 1 || prioridad > 3) {
+        Optional<Prioridad> prioridadElegida = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "));
+        if (prioridadElegida.isEmpty()) {
             System.out.println("Error: prioridad invalida");
             return;
         }
+        Prioridad prioridad = prioridadElegida.get();
 
         // los reclamos de nota siempre van con prioridad alta (pedido de secretaria)
-        if (tipo.equals("RECLAMO_NOTA")) {
-            prioridad = 1;
+        if (tipo == TipoSolicitud.RECLAMO_NOTA) {
+            prioridad = Prioridad.ALTA;
         }
 
         Solicitud solicitud = new Solicitud();
@@ -114,7 +107,7 @@ public class GestorSolicitudes {
         solicitud.tipo = tipo;
         solicitud.descripcion = descripcion;
         solicitud.prioridad = prioridad;
-        solicitud.estado = "PENDIENTE";
+        solicitud.estado = EstadoSolicitud.PENDIENTE;
         repositorioSolicitudes.guardar(solicitud);
         System.out.println("Solicitud registrada con ID " + solicitud.id + " para " + estudiante.nombre + ".");
     }
@@ -134,34 +127,21 @@ public class GestorSolicitudes {
         System.out.println("2. En proceso");
         System.out.println("3. Resuelta");
         System.out.println("4. Rechazada");
-        int opcionEstado = leerEntero("Opcion: ");
-        String estadoNuevo;
-        switch (opcionEstado) {
-            case 1:
-                estadoNuevo = "PENDIENTE";
-                break;
-            case 2:
-                estadoNuevo = "EN_PROCESO";
-                break;
-            case 3:
-                estadoNuevo = "RESUELTA";
-                break;
-            case 4:
-                estadoNuevo = "RECHAZADA";
-                break;
-            default:
-                System.out.println("Error: estado invalido");
-                return;
+        Optional<EstadoSolicitud> estadoElegido = estadoSegunOpcion(leerEntero("Opcion: "));
+        if (estadoElegido.isEmpty()) {
+            System.out.println("Error: estado invalido");
+            return;
         }
+        EstadoSolicitud estadoNuevo = estadoElegido.get();
 
         // validar transicion
         boolean transicionValida = false;
-        if (solicitud.estado.equals("PENDIENTE")) {
-            if (estadoNuevo.equals("EN_PROCESO") || estadoNuevo.equals("RECHAZADA")) {
+        if (solicitud.estado == EstadoSolicitud.PENDIENTE) {
+            if (estadoNuevo == EstadoSolicitud.EN_PROCESO || estadoNuevo == EstadoSolicitud.RECHAZADA) {
                 transicionValida = true;
             }
-        } else if (solicitud.estado.equals("EN_PROCESO")) {
-            if (estadoNuevo.equals("RESUELTA") || estadoNuevo.equals("RECHAZADA")) {
+        } else if (solicitud.estado == EstadoSolicitud.EN_PROCESO) {
+            if (estadoNuevo == EstadoSolicitud.RESUELTA || estadoNuevo == EstadoSolicitud.RECHAZADA) {
                 transicionValida = true;
             }
         }
@@ -170,12 +150,12 @@ public class GestorSolicitudes {
             return;
         }
 
-        if (estadoNuevo.equals("EN_PROCESO") && solicitud.responsable == null) {
+        if (estadoNuevo == EstadoSolicitud.EN_PROCESO && solicitud.responsable == null) {
             System.out.println("Error: la solicitud debe tener un responsable asignado para pasar a EN_PROCESO");
             return;
         }
 
-        if (estadoNuevo.equals("RECHAZADA")) {
+        if (estadoNuevo == EstadoSolicitud.RECHAZADA) {
             System.out.print("Motivo del rechazo: ");
             String motivo = scanner.nextLine().trim();
             if (motivo.equals("")) {
@@ -185,7 +165,7 @@ public class GestorSolicitudes {
             solicitud.motivoRechazo = motivo;
         }
 
-        String estadoAnterior = solicitud.estado;
+        EstadoSolicitud estadoAnterior = solicitud.estado;
         solicitud.estado = estadoNuevo;
         System.out.println("Solicitud " + solicitud.id + ": " + estadoAnterior + " -> " + estadoNuevo);
     }
@@ -198,14 +178,14 @@ public class GestorSolicitudes {
             return;
         }
         Solicitud solicitud = solicitudEncontrada.get();
-        if (solicitud.estado.equals("RESUELTA") || solicitud.estado.equals("RECHAZADA")) {
+        if (solicitud.estado == EstadoSolicitud.RESUELTA || solicitud.estado == EstadoSolicitud.RECHAZADA) {
             System.out.println("Error: no se puede asignar responsable a una solicitud cerrada");
             return;
         }
 
         System.out.println("Responsables disponibles:");
         for (Responsable disponible : repositorioResponsables.buscarTodos()) {
-            System.out.println(disponible.id + ". " + disponible.nombre + " (" + disponible.area + ")");
+            System.out.println(disponible.id + ". " + disponible.nombre + " (" + disponible.area.getNombre() + ")");
         }
         int idResponsable = leerEntero("ID del responsable: ");
         Optional<Responsable> responsableEncontrado = repositorioResponsables.buscarPorId(idResponsable);
@@ -216,14 +196,14 @@ public class GestorSolicitudes {
         Responsable responsable = responsableEncontrado.get();
 
         // cada area atiende ciertos tipos
-        String areaNecesaria;
-        if (solicitud.tipo.equals("CERTIFICADO") || solicitud.tipo.equals("CAMBIO_COMISION")) {
-            areaNecesaria = "ALUMNADO";
+        Area areaNecesaria;
+        if (solicitud.tipo == TipoSolicitud.CERTIFICADO || solicitud.tipo == TipoSolicitud.CAMBIO_COMISION) {
+            areaNecesaria = Area.ALUMNADO;
         } else {
-            areaNecesaria = "DEPARTAMENTO ACADEMICO";
+            areaNecesaria = Area.DEPARTAMENTO_ACADEMICO;
         }
-        if (!responsable.area.equals(areaNecesaria)) {
-            System.out.println("Error: las solicitudes de tipo " + solicitud.tipo + " las atiende el area " + areaNecesaria);
+        if (responsable.area != areaNecesaria) {
+            System.out.println("Error: las solicitudes de tipo " + solicitud.tipo + " las atiende el area " + areaNecesaria.getNombre());
             return;
         }
 
@@ -243,18 +223,18 @@ public class GestorSolicitudes {
         if (opcionFiltro == 1) {
             System.out.print("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ");
             String estadoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
-            criterio = solicitud -> solicitud.estado.equals(estadoBuscado);
+            criterio = solicitud -> solicitud.estado.name().equals(estadoBuscado);
         } else if (opcionFiltro == 2) {
             System.out.print("Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): ");
             String tipoBuscado = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
-            criterio = solicitud -> solicitud.tipo.equals(tipoBuscado);
+            criterio = solicitud -> solicitud.tipo.name().equals(tipoBuscado);
         } else if (opcionFiltro == 3) {
             System.out.print("Legajo: ");
             String legajoBuscado = scanner.nextLine().trim();
             criterio = solicitud -> solicitud.legajoEstudiante.equals(legajoBuscado);
         } else if (opcionFiltro == 4) {
-            int prioridadBuscada = leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): ");
-            criterio = solicitud -> solicitud.prioridad == prioridadBuscada;
+            Optional<Prioridad> prioridadBuscada = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "));
+            criterio = solicitud -> prioridadBuscada.isPresent() && solicitud.prioridad == prioridadBuscada.get();
         } else {
             System.out.println("Opcion invalida.");
             return;
@@ -297,21 +277,21 @@ public class GestorSolicitudes {
         int altaSinResolver = 0;
         int sinResponsable = 0;
         for (Solicitud solicitud : solicitudes) {
-            if (solicitud.estado.equals("PENDIENTE")) pendientes++;
-            else if (solicitud.estado.equals("EN_PROCESO")) enProceso++;
-            else if (solicitud.estado.equals("RESUELTA")) resueltas++;
-            else if (solicitud.estado.equals("RECHAZADA")) rechazadas++;
+            if (solicitud.estado == EstadoSolicitud.PENDIENTE) pendientes++;
+            else if (solicitud.estado == EstadoSolicitud.EN_PROCESO) enProceso++;
+            else if (solicitud.estado == EstadoSolicitud.RESUELTA) resueltas++;
+            else if (solicitud.estado == EstadoSolicitud.RECHAZADA) rechazadas++;
 
-            if (solicitud.tipo.equals("CERTIFICADO")) certificados++;
-            else if (solicitud.tipo.equals("EQUIVALENCIA")) equivalencias++;
-            else if (solicitud.tipo.equals("CAMBIO_COMISION")) cambiosComision++;
-            else if (solicitud.tipo.equals("RECLAMO_NOTA")) reclamosNota++;
+            if (solicitud.tipo == TipoSolicitud.CERTIFICADO) certificados++;
+            else if (solicitud.tipo == TipoSolicitud.EQUIVALENCIA) equivalencias++;
+            else if (solicitud.tipo == TipoSolicitud.CAMBIO_COMISION) cambiosComision++;
+            else if (solicitud.tipo == TipoSolicitud.RECLAMO_NOTA) reclamosNota++;
 
-            if (solicitud.prioridad == 1) prioridadAlta++;
-            else if (solicitud.prioridad == 2) prioridadMedia++;
+            if (solicitud.prioridad == Prioridad.ALTA) prioridadAlta++;
+            else if (solicitud.prioridad == Prioridad.MEDIA) prioridadMedia++;
             else prioridadBaja++;
 
-            if (solicitud.prioridad == 1 && (solicitud.estado.equals("PENDIENTE") || solicitud.estado.equals("EN_PROCESO"))) {
+            if (solicitud.prioridad == Prioridad.ALTA && (solicitud.estado == EstadoSolicitud.PENDIENTE || solicitud.estado == EstadoSolicitud.EN_PROCESO)) {
                 altaSinResolver++;
             }
             if (solicitud.responsable == null) {
@@ -347,21 +327,42 @@ public class GestorSolicitudes {
         String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
                 .map(estudiante -> estudiante.nombre)
                 .orElse("");
-        String etiquetaPrioridad;
-        if (solicitud.prioridad == 1) {
-            etiquetaPrioridad = "ALTA";
-        } else if (solicitud.prioridad == 2) {
-            etiquetaPrioridad = "MEDIA";
-        } else {
-            etiquetaPrioridad = "BAJA";
-        }
         String linea = "#" + solicitud.id + " [" + solicitud.tipo + "] " + solicitud.descripcion + " | Estudiante: " + nombreEstudiante + " (" + solicitud.legajoEstudiante + ")"
-                + " | Prioridad: " + etiquetaPrioridad + " | Estado: " + solicitud.estado
+                + " | Prioridad: " + solicitud.prioridad + " | Estado: " + solicitud.estado
                 + " | Responsable: " + (solicitud.responsable == null ? "-" : solicitud.responsable.nombre);
-        if (solicitud.estado.equals("RECHAZADA")) {
+        if (solicitud.estado == EstadoSolicitud.RECHAZADA) {
             linea = linea + " | Motivo: " + solicitud.motivoRechazo;
         }
         return linea;
+    }
+
+    private Optional<TipoSolicitud> tipoSegunOpcion(int opcion) {
+        return switch (opcion) {
+            case 1 -> Optional.of(TipoSolicitud.CERTIFICADO);
+            case 2 -> Optional.of(TipoSolicitud.EQUIVALENCIA);
+            case 3 -> Optional.of(TipoSolicitud.CAMBIO_COMISION);
+            case 4 -> Optional.of(TipoSolicitud.RECLAMO_NOTA);
+            default -> Optional.empty();
+        };
+    }
+
+    private Optional<EstadoSolicitud> estadoSegunOpcion(int opcion) {
+        return switch (opcion) {
+            case 1 -> Optional.of(EstadoSolicitud.PENDIENTE);
+            case 2 -> Optional.of(EstadoSolicitud.EN_PROCESO);
+            case 3 -> Optional.of(EstadoSolicitud.RESUELTA);
+            case 4 -> Optional.of(EstadoSolicitud.RECHAZADA);
+            default -> Optional.empty();
+        };
+    }
+
+    private Optional<Prioridad> prioridadSegunOpcion(int opcion) {
+        return switch (opcion) {
+            case 1 -> Optional.of(Prioridad.ALTA);
+            case 2 -> Optional.of(Prioridad.MEDIA);
+            case 3 -> Optional.of(Prioridad.BAJA);
+            default -> Optional.empty();
+        };
     }
 
     private int leerEntero(String mensaje) {

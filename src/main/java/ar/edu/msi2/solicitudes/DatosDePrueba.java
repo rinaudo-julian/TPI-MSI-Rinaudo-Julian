@@ -23,41 +23,41 @@ public class DatosDePrueba {
         repositorioEstudiantes.guardar(new Estudiante("1002", "Bruno Diaz", "bruno.diaz@mail.com", "Ingenieria en Sistemas"));
         repositorioEstudiantes.guardar(new Estudiante("1003", "Carla Perez", "carla.perez@mail.com", "Licenciatura en Administracion"));
 
-        Responsable laura = repositorioResponsables.guardar(new Responsable("Laura Fernandez", "ALUMNADO"));
-        repositorioResponsables.guardar(new Responsable("Marcos Ruiz", "ALUMNADO"));
-        Responsable silvia = repositorioResponsables.guardar(new Responsable("Silvia Torres", "DEPARTAMENTO ACADEMICO"));
+        Responsable laura = repositorioResponsables.guardar(new Responsable("Laura Fernandez", Area.ALUMNADO));
+        repositorioResponsables.guardar(new Responsable("Marcos Ruiz", Area.ALUMNADO));
+        Responsable silvia = repositorioResponsables.guardar(new Responsable("Silvia Torres", Area.DEPARTAMENTO_ACADEMICO));
 
         Solicitud certificado = new Solicitud();
         certificado.legajoEstudiante = "1001";
-        certificado.tipo = "CERTIFICADO";
+        certificado.tipo = TipoSolicitud.CERTIFICADO;
         certificado.descripcion = "Certificado de alumno regular";
-        certificado.prioridad = 3;
-        certificado.estado = "PENDIENTE";
+        certificado.prioridad = Prioridad.BAJA;
+        certificado.estado = EstadoSolicitud.PENDIENTE;
         repositorioSolicitudes.guardar(certificado);
 
         Solicitud equivalencia = new Solicitud();
         equivalencia.legajoEstudiante = "1002";
-        equivalencia.tipo = "EQUIVALENCIA";
+        equivalencia.tipo = TipoSolicitud.EQUIVALENCIA;
         equivalencia.descripcion = "Equivalencia de Algebra";
-        equivalencia.prioridad = 2;
-        equivalencia.estado = "EN_PROCESO";
+        equivalencia.prioridad = Prioridad.MEDIA;
+        equivalencia.estado = EstadoSolicitud.EN_PROCESO;
         equivalencia.responsable = silvia;
         repositorioSolicitudes.guardar(equivalencia);
 
         Solicitud reclamoNota = new Solicitud();
         reclamoNota.legajoEstudiante = "1003";
-        reclamoNota.tipo = "RECLAMO_NOTA";
+        reclamoNota.tipo = TipoSolicitud.RECLAMO_NOTA;
         reclamoNota.descripcion = "Revision de nota del parcial de Contabilidad";
-        reclamoNota.prioridad = 1;
-        reclamoNota.estado = "PENDIENTE";
+        reclamoNota.prioridad = Prioridad.ALTA;
+        reclamoNota.estado = EstadoSolicitud.PENDIENTE;
         repositorioSolicitudes.guardar(reclamoNota);
 
         Solicitud cambioComision = new Solicitud();
         cambioComision.legajoEstudiante = "1001";
-        cambioComision.tipo = "CAMBIO_COMISION";
+        cambioComision.tipo = TipoSolicitud.CAMBIO_COMISION;
         cambioComision.descripcion = "Cambio a comision noche";
-        cambioComision.prioridad = 2;
-        cambioComision.estado = "RESUELTA";
+        cambioComision.prioridad = Prioridad.MEDIA;
+        cambioComision.estado = EstadoSolicitud.RESUELTA;
         cambioComision.responsable = laura;
         repositorioSolicitudes.guardar(cambioComision);
     }

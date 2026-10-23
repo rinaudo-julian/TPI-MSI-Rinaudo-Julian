@@ -3,10 +3,10 @@ package ar.edu.msi2.solicitudes;
 public class Solicitud {
     public int id;
     public String legajoEstudiante;
-    public String tipo;
+    public TipoSolicitud tipo;
     public String descripcion;
-    public int prioridad;
-    public String estado;
+    public Prioridad prioridad;
+    public EstadoSolicitud estado;
     public Responsable responsable;
     public String motivoRechazo;
 }
