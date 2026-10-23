@@ -16,6 +16,4 @@ public interface RepositorioSolicitudes {
     Optional<Solicitud> buscarPorId(int id);
 
     List<Solicitud> buscarTodas();
-
-    void eliminar(int id);
 }

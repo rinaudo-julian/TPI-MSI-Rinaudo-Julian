@@ -40,9 +40,4 @@ public class RepositorioResponsablesEnMemoria implements RepositorioResponsables
     public List<Responsable> buscarTodos() {
         return List.copyOf(responsables);
     }
-
-    @Override
-    public void eliminar(int id) {
-        responsables.removeIf(responsable -> responsable.getId() == id);
-    }
 }

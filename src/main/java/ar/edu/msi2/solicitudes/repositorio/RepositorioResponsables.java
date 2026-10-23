@@ -16,6 +16,4 @@ public interface RepositorioResponsables {
     Optional<Responsable> buscarPorId(int id);
 
     List<Responsable> buscarTodos();
-
-    void eliminar(int id);
 }

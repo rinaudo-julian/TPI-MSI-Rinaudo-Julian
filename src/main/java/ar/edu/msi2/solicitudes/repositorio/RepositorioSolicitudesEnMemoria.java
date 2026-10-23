@@ -40,9 +40,4 @@ public class RepositorioSolicitudesEnMemoria implements RepositorioSolicitudes {
     public List<Solicitud> buscarTodas() {
         return List.copyOf(solicitudes);
     }
-
-    @Override
-    public void eliminar(int id) {
-        solicitudes.removeIf(solicitud -> solicitud.getId() == id);
-    }
 }

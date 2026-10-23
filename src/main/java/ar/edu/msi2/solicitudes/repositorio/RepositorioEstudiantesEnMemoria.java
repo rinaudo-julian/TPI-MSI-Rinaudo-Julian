@@ -28,14 +28,4 @@ public class RepositorioEstudiantesEnMemoria implements RepositorioEstudiantes {
                 .filter(estudiante -> estudiante.getLegajo().equals(legajo))
                 .findFirst();
     }
-
-    @Override
-    public List<Estudiante> buscarTodos() {
-        return List.copyOf(estudiantes);
-    }
-
-    @Override
-    public void eliminar(String legajo) {
-        estudiantes.removeIf(estudiante -> estudiante.getLegajo().equals(legajo));
-    }
 }
