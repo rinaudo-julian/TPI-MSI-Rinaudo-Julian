@@ -1,37 +1,45 @@
 package ar.edu.msi2.solicitudes;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
-public class GestorSolicitudes {
+/**
+ * Interfaz de usuario por consola: muestra menus, lee datos, delega en el servicio y muestra
+ * los resultados. No contiene reglas de negocio.
+ */
+public class MenuConsola {
 
     private final ServicioSolicitudes servicio;
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner entrada;
+    private final PrintStream salida;
 
-    public GestorSolicitudes(ServicioSolicitudes servicio) {
+    public MenuConsola(ServicioSolicitudes servicio, Scanner entrada, PrintStream salida) {
         this.servicio = servicio;
+        this.entrada = entrada;
+        this.salida = salida;
     }
 
-    public void mostrarMenu() {
+    public void iniciar() {
         int opcion = -1;
         while (opcion != 0) {
-            System.out.println();
-            System.out.println("===== GESTION DE SOLICITUDES ACADEMICAS =====");
-            System.out.println("1. Registrar solicitud");
-            System.out.println("2. Cambiar estado");
-            System.out.println("3. Asignar responsable");
-            System.out.println("4. Buscar / filtrar solicitudes");
-            System.out.println("5. Listar solicitudes");
-            System.out.println("6. Reporte");
-            System.out.println("0. Salir");
+            salida.println();
+            salida.println("===== GESTION DE SOLICITUDES ACADEMICAS =====");
+            salida.println("1. Registrar solicitud");
+            salida.println("2. Cambiar estado");
+            salida.println("3. Asignar responsable");
+            salida.println("4. Buscar / filtrar solicitudes");
+            salida.println("5. Listar solicitudes");
+            salida.println("6. Reporte");
+            salida.println("0. Salir");
             opcion = leerEntero("Opcion: ");
             try {
                 ejecutarOpcion(opcion);
             } catch (ReglaDeNegocioException e) {
-                System.out.println("Error: " + e.getMessage());
+                salida.println("Error: " + e.getMessage());
             }
         }
     }
@@ -50,99 +58,99 @@ public class GestorSolicitudes {
         } else if (opcion == 6) {
             mostrarReporte();
         } else if (opcion == 0) {
-            System.out.println("Hasta luego.");
+            salida.println("Hasta luego.");
         } else {
-            System.out.println("Opcion invalida.");
+            salida.println("Opcion invalida.");
         }
     }
 
     private void registrarSolicitud() {
-        System.out.print("Legajo del estudiante: ");
-        String legajo = scanner.nextLine().trim();
+        salida.print("Legajo del estudiante: ");
+        String legajo = entrada.nextLine().trim();
         Estudiante estudiante = servicio.buscarEstudiante(legajo);
 
-        System.out.println("Tipo de solicitud:");
-        System.out.println("1. Certificado");
-        System.out.println("2. Equivalencia");
-        System.out.println("3. Cambio de comision");
-        System.out.println("4. Reclamo de nota");
+        salida.println("Tipo de solicitud:");
+        salida.println("1. Certificado");
+        salida.println("2. Equivalencia");
+        salida.println("3. Cambio de comision");
+        salida.println("4. Reclamo de nota");
         TipoSolicitud tipo = tipoSegunOpcion(leerEntero("Opcion: "))
                 .orElseThrow(() -> new ReglaDeNegocioException("tipo invalido"));
 
-        System.out.print("Descripcion: ");
-        String descripcion = scanner.nextLine().trim();
+        salida.print("Descripcion: ");
+        String descripcion = entrada.nextLine().trim();
         Solicitud.validarDescripcion(descripcion);
 
         Prioridad prioridad = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "))
                 .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
 
         Solicitud solicitud = servicio.registrarSolicitud(legajo, tipo, descripcion, prioridad);
-        System.out.println("Solicitud registrada con ID " + solicitud.getId() + " para " + estudiante.getNombre() + ".");
+        salida.println("Solicitud registrada con ID " + solicitud.getId() + " para " + estudiante.getNombre() + ".");
     }
 
     private void cambiarEstado() {
         Solicitud solicitud = servicio.buscarSolicitud(leerEntero("ID de la solicitud: "));
 
-        System.out.println("Estado actual: " + solicitud.getEstado());
-        System.out.println("Nuevo estado:");
-        System.out.println("1. Pendiente");
-        System.out.println("2. En proceso");
-        System.out.println("3. Resuelta");
-        System.out.println("4. Rechazada");
+        salida.println("Estado actual: " + solicitud.getEstado());
+        salida.println("Nuevo estado:");
+        salida.println("1. Pendiente");
+        salida.println("2. En proceso");
+        salida.println("3. Resuelta");
+        salida.println("4. Rechazada");
         EstadoSolicitud estadoNuevo = estadoSegunOpcion(leerEntero("Opcion: "))
                 .orElseThrow(() -> new ReglaDeNegocioException("estado invalido"));
         solicitud.verificarTransicionA(estadoNuevo);
 
         EstadoSolicitud estadoAnterior = solicitud.getEstado();
         if (estadoNuevo == EstadoSolicitud.RECHAZADA) {
-            System.out.print("Motivo del rechazo: ");
-            servicio.rechazar(solicitud.getId(), scanner.nextLine().trim());
+            salida.print("Motivo del rechazo: ");
+            servicio.rechazar(solicitud.getId(), entrada.nextLine().trim());
         } else {
             servicio.cambiarEstado(solicitud.getId(), estadoNuevo);
         }
-        System.out.println("Solicitud " + solicitud.getId() + ": " + estadoAnterior + " -> " + estadoNuevo);
+        salida.println("Solicitud " + solicitud.getId() + ": " + estadoAnterior + " -> " + estadoNuevo);
     }
 
     private void asignarResponsable() {
         Solicitud solicitud = servicio.buscarSolicitud(leerEntero("ID de la solicitud: "));
         solicitud.verificarQueAdmiteResponsable();
 
-        System.out.println("Responsables disponibles:");
+        salida.println("Responsables disponibles:");
         for (Responsable disponible : servicio.listarResponsables()) {
-            System.out.println(disponible.getId() + ". " + disponible.getNombre() + " (" + disponible.getArea().getNombre() + ")");
+            salida.println(disponible.getId() + ". " + disponible.getNombre() + " (" + disponible.getArea().getNombre() + ")");
         }
         int idResponsable = leerEntero("ID del responsable: ");
 
         Solicitud actualizada = servicio.asignarResponsable(solicitud.getId(), idResponsable);
-        System.out.println("Responsable " + actualizada.getResponsable().getNombre() + " asignado a la solicitud " + actualizada.getId() + ".");
+        salida.println("Responsable " + actualizada.getResponsable().getNombre() + " asignado a la solicitud " + actualizada.getId() + ".");
     }
 
     private void buscarSolicitudes() {
-        System.out.println("Buscar por:");
-        System.out.println("1. Estado");
-        System.out.println("2. Tipo");
-        System.out.println("3. Legajo del estudiante");
-        System.out.println("4. Prioridad");
+        salida.println("Buscar por:");
+        salida.println("1. Estado");
+        salida.println("2. Tipo");
+        salida.println("3. Legajo del estudiante");
+        salida.println("4. Prioridad");
         int opcionFiltro = leerEntero("Opcion: ");
 
         Predicate<Solicitud> criterio;
         if (opcionFiltro == 1) {
-            System.out.print("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ");
+            salida.print("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ");
             String estadoBuscado = leerCodigo();
             criterio = solicitud -> solicitud.getEstado().name().equals(estadoBuscado);
         } else if (opcionFiltro == 2) {
-            System.out.print("Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): ");
+            salida.print("Tipo (CERTIFICADO, EQUIVALENCIA, CAMBIO_COMISION, RECLAMO_NOTA): ");
             String tipoBuscado = leerCodigo();
             criterio = solicitud -> solicitud.getTipo().name().equals(tipoBuscado);
         } else if (opcionFiltro == 3) {
-            System.out.print("Legajo: ");
-            String legajoBuscado = scanner.nextLine().trim();
+            salida.print("Legajo: ");
+            String legajoBuscado = entrada.nextLine().trim();
             criterio = solicitud -> solicitud.getLegajoEstudiante().equals(legajoBuscado);
         } else if (opcionFiltro == 4) {
             Optional<Prioridad> prioridadBuscada = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "));
             criterio = solicitud -> prioridadBuscada.isPresent() && solicitud.getPrioridad() == prioridadBuscada.get();
         } else {
-            System.out.println("Opcion invalida.");
+            salida.println("Opcion invalida.");
             return;
         }
         mostrarResultadoBusqueda(servicio.buscarSolicitudes(criterio));
@@ -150,43 +158,43 @@ public class GestorSolicitudes {
 
     private void mostrarResultadoBusqueda(List<Solicitud> encontradas) {
         for (Solicitud solicitud : encontradas) {
-            System.out.println(formatearSolicitud(solicitud));
+            salida.println(formatearSolicitud(solicitud));
         }
         if (encontradas.isEmpty()) {
-            System.out.println("No se encontraron solicitudes.");
+            salida.println("No se encontraron solicitudes.");
         } else {
-            System.out.println("Se encontraron " + encontradas.size() + " solicitud(es).");
+            salida.println("Se encontraron " + encontradas.size() + " solicitud(es).");
         }
     }
 
     private void listarSolicitudes() {
         List<Solicitud> solicitudes = servicio.listarSolicitudes();
         if (solicitudes.isEmpty()) {
-            System.out.println("No hay solicitudes registradas.");
+            salida.println("No hay solicitudes registradas.");
             return;
         }
-        System.out.println("Listado de solicitudes (" + solicitudes.size() + "):");
+        salida.println("Listado de solicitudes (" + solicitudes.size() + "):");
         for (Solicitud solicitud : solicitudes) {
-            System.out.println(formatearSolicitud(solicitud));
+            salida.println(formatearSolicitud(solicitud));
         }
     }
 
     private void mostrarReporte() {
         ReporteSolicitudes reporte = servicio.generarReporte();
-        System.out.println("===== REPORTE DE SOLICITUDES =====");
-        System.out.println("Total de solicitudes: " + reporte.total());
+        salida.println("===== REPORTE DE SOLICITUDES =====");
+        salida.println("Total de solicitudes: " + reporte.total());
         imprimirConteo("Por estado:", reporte.porEstado());
         imprimirConteo("Por tipo:", reporte.porTipo());
         imprimirConteo("Por prioridad:", reporte.porPrioridad());
-        System.out.println("Porcentaje de resueltas: " + reporte.porcentajeResueltas() + "%");
-        System.out.println("Prioridad ALTA sin resolver: " + reporte.altaSinResolver());
-        System.out.println("Sin responsable asignado: " + reporte.sinResponsable());
+        salida.println("Porcentaje de resueltas: " + reporte.porcentajeResueltas() + "%");
+        salida.println("Prioridad ALTA sin resolver: " + reporte.altaSinResolver());
+        salida.println("Sin responsable asignado: " + reporte.sinResponsable());
     }
 
     private void imprimirConteo(String titulo, Map<? extends Enum<?>, Long> conteo) {
-        System.out.println(titulo);
+        salida.println(titulo);
         for (Map.Entry<? extends Enum<?>, Long> entrada : conteo.entrySet()) {
-            System.out.println("  " + entrada.getKey() + ": " + entrada.getValue());
+            salida.println("  " + entrada.getKey() + ": " + entrada.getValue());
         }
     }
 
@@ -237,14 +245,14 @@ public class GestorSolicitudes {
      * Lee un texto y lo normaliza al formato de los nombres de los enums: "en proceso" -> "EN_PROCESO".
      */
     private String leerCodigo() {
-        return scanner.nextLine().trim().toUpperCase().replace(" ", "_");
+        return entrada.nextLine().trim().toUpperCase().replace(" ", "_");
     }
 
     private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        String entrada = scanner.nextLine();
+        salida.print(mensaje);
+        String linea = entrada.nextLine();
         try {
-            return Integer.parseInt(entrada.trim());
+            return Integer.parseInt(linea.trim());
         } catch (NumberFormatException e) {
             return -1;
         }
