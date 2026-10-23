@@ -91,7 +91,7 @@ public class MenuConsola {
         String descripcion = entrada.nextLine().trim();
         Solicitud.validarDescripcion(descripcion);
 
-        Prioridad prioridad = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "))
+        Prioridad prioridad = leerPrioridad()
                 .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
 
         Solicitud solicitud = servicio.registrarSolicitud(legajo, tipo, descripcion, prioridad);
@@ -157,7 +157,7 @@ public class MenuConsola {
             String legajoBuscado = entrada.nextLine().trim();
             criterio = solicitud -> solicitud.getLegajoEstudiante().equals(legajoBuscado);
         } else if (opcionFiltro == 4) {
-            Optional<Prioridad> prioridadBuscada = prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "));
+            Optional<Prioridad> prioridadBuscada = leerPrioridad();
             criterio = solicitud -> prioridadBuscada.isPresent() && solicitud.getPrioridad() == prioridadBuscada.get();
         } else {
             salida.println("Opcion invalida.");
@@ -240,6 +240,10 @@ public class MenuConsola {
             case 4 -> Optional.of(EstadoSolicitud.RECHAZADA);
             default -> Optional.empty();
         };
+    }
+
+    private Optional<Prioridad> leerPrioridad() {
+        return prioridadSegunOpcion(leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): "));
     }
 
     private Optional<Prioridad> prioridadSegunOpcion(int opcion) {
