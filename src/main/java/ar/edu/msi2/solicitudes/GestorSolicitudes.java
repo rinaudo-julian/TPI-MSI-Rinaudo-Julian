@@ -193,8 +193,6 @@ public class GestorSolicitudes {
             if (estadoNuevo.equals("RESUELTA") || estadoNuevo.equals("RECHAZADA")) {
                 transicionValida = true;
             }
-        } else if (solicitud.estado.equals("RESUELTA") || solicitud.estado.equals("RECHAZADA")) {
-            transicionValida = false;
         }
         if (!transicionValida) {
             System.out.println("Error: no se puede pasar de " + solicitud.estado + " a " + estadoNuevo);
@@ -435,7 +433,6 @@ public class GestorSolicitudes {
                 linea = linea + " | Motivo: " + solicitud.motivoRechazo;
             }
             System.out.println(linea);
-            //System.out.println(s.id + " - " + s.tipo + " - " + s.estado);
         }
     }
 
@@ -492,9 +489,5 @@ public class GestorSolicitudes {
         System.out.println("Porcentaje de resueltas: " + porcentajeResueltas + "%");
         System.out.println("Prioridad ALTA sin resolver: " + altaSinResolver);
         System.out.println("Sin responsable asignado: " + sinResponsable);
-    }
-
-    public Solicitud buscarPorId(int id) {
-        return repositorioSolicitudes.buscarPorId(id).orElse(null);
     }
 }
