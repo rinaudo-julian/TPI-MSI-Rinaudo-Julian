@@ -1,4 +1,8 @@
-package ar.edu.msi2.solicitudes;
+package ar.edu.msi2.solicitudes.servicio;
+
+import ar.edu.msi2.solicitudes.dominio.EstadoSolicitud;
+import ar.edu.msi2.solicitudes.dominio.Prioridad;
+import ar.edu.msi2.solicitudes.dominio.TipoSolicitud;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package ar.edu.msi2.solicitudes;
+package ar.edu.msi2.solicitudes.dominio;
 
 public class Estudiante {
     private final String legajo;

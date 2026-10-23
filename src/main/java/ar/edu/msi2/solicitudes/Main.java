@@ -1,11 +1,13 @@
 package ar.edu.msi2.solicitudes;
 
+import ar.edu.msi2.solicitudes.consola.MenuConsola;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantes;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantesEnMemoria;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsables;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsablesEnMemoria;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudesEnMemoria;
+import ar.edu.msi2.solicitudes.servicio.ServicioSolicitudes;
 
 import java.util.Scanner;
 

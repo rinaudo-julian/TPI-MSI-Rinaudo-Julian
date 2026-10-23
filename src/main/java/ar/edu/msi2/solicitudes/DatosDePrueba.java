@@ -1,5 +1,12 @@
 package ar.edu.msi2.solicitudes;
 
+import ar.edu.msi2.solicitudes.dominio.Area;
+import ar.edu.msi2.solicitudes.dominio.EstadoSolicitud;
+import ar.edu.msi2.solicitudes.dominio.Estudiante;
+import ar.edu.msi2.solicitudes.dominio.Prioridad;
+import ar.edu.msi2.solicitudes.dominio.Responsable;
+import ar.edu.msi2.solicitudes.dominio.Solicitud;
+import ar.edu.msi2.solicitudes.dominio.TipoSolicitud;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioEstudiantes;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioResponsables;
 import ar.edu.msi2.solicitudes.repositorio.RepositorioSolicitudes;

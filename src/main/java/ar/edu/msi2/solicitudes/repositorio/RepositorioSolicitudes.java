@@ -1,6 +1,6 @@
 package ar.edu.msi2.solicitudes.repositorio;
 
-import ar.edu.msi2.solicitudes.Solicitud;
+import ar.edu.msi2.solicitudes.dominio.Solicitud;
 
 import java.util.List;
 import java.util.Optional;
