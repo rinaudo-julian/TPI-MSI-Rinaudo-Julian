@@ -35,13 +35,7 @@ public class GestorSolicitudes {
             System.out.println("5. Listar solicitudes");
             System.out.println("6. Reporte");
             System.out.println("0. Salir");
-            System.out.print("Opcion: ");
-            String entrada = scanner.nextLine();
-            try {
-                opcion = Integer.parseInt(entrada.trim());
-            } catch (Exception e) {
-                opcion = -1;
-            }
+            opcion = leerEntero("Opcion: ");
             if (opcion == 1) {
                 registrarSolicitud();
             } else if (opcion == 2) {
@@ -77,13 +71,7 @@ public class GestorSolicitudes {
         System.out.println("2. Equivalencia");
         System.out.println("3. Cambio de comision");
         System.out.println("4. Reclamo de nota");
-        System.out.print("Opcion: ");
-        int opcionTipo;
-        try {
-            opcionTipo = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception e) {
-            opcionTipo = -1;
-        }
+        int opcionTipo = leerEntero("Opcion: ");
         String tipo = "";
         if (opcionTipo == 1) {
             tipo = "CERTIFICADO";
@@ -109,13 +97,7 @@ public class GestorSolicitudes {
             return;
         }
 
-        System.out.print("Prioridad (1=Alta, 2=Media, 3=Baja): ");
-        int prioridad;
-        try {
-            prioridad = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception e) {
-            prioridad = -1;
-        }
+        int prioridad = leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): ");
         if (prioridad < 1 || prioridad > 3) {
             System.out.println("Error: prioridad invalida");
             return;
@@ -137,13 +119,7 @@ public class GestorSolicitudes {
     }
 
     public void cambiarEstado() {
-        System.out.print("ID de la solicitud: ");
-        int id;
-        try {
-            id = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception e) {
-            id = -1;
-        }
+        int id = leerEntero("ID de la solicitud: ");
         Optional<Solicitud> solicitudEncontrada = repositorioSolicitudes.buscarPorId(id);
         if (solicitudEncontrada.isEmpty()) {
             System.out.println("Error: no existe la solicitud " + id);
@@ -157,13 +133,7 @@ public class GestorSolicitudes {
         System.out.println("2. En proceso");
         System.out.println("3. Resuelta");
         System.out.println("4. Rechazada");
-        System.out.print("Opcion: ");
-        int opcionEstado;
-        try {
-            opcionEstado = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception e) {
-            opcionEstado = -1;
-        }
+        int opcionEstado = leerEntero("Opcion: ");
         String estadoNuevo;
         switch (opcionEstado) {
             case 1:
@@ -220,13 +190,7 @@ public class GestorSolicitudes {
     }
 
     public void asignarResponsable() {
-        System.out.print("ID de la solicitud: ");
-        int id;
-        try {
-            id = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception e) {
-            id = -1;
-        }
+        int id = leerEntero("ID de la solicitud: ");
         Optional<Solicitud> solicitudEncontrada = repositorioSolicitudes.buscarPorId(id);
         if (solicitudEncontrada.isEmpty()) {
             System.out.println("Error: no existe la solicitud " + id);
@@ -242,13 +206,7 @@ public class GestorSolicitudes {
         for (Responsable disponible : repositorioResponsables.buscarTodos()) {
             System.out.println(disponible.id + ". " + disponible.nombre + " (" + disponible.area + ")");
         }
-        System.out.print("ID del responsable: ");
-        int idResponsable;
-        try {
-            idResponsable = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception e) {
-            idResponsable = -1;
-        }
+        int idResponsable = leerEntero("ID del responsable: ");
         Optional<Responsable> responsableEncontrado = repositorioResponsables.buscarPorId(idResponsable);
         if (responsableEncontrado.isEmpty()) {
             System.out.println("Error: no existe el responsable " + idResponsable);
@@ -278,13 +236,7 @@ public class GestorSolicitudes {
         System.out.println("2. Tipo");
         System.out.println("3. Legajo del estudiante");
         System.out.println("4. Prioridad");
-        System.out.print("Opcion: ");
-        int opcionFiltro;
-        try {
-            opcionFiltro = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception e) {
-            opcionFiltro = -1;
-        }
+        int opcionFiltro = leerEntero("Opcion: ");
 
         int encontradas = 0;
         if (opcionFiltro == 1) {
@@ -366,13 +318,7 @@ public class GestorSolicitudes {
                 }
             }
         } else if (opcionFiltro == 4) {
-            System.out.print("Prioridad (1=Alta, 2=Media, 3=Baja): ");
-            int prioridadBuscada;
-            try {
-                prioridadBuscada = Integer.parseInt(scanner.nextLine().trim());
-            } catch (Exception e) {
-                prioridadBuscada = -1;
-            }
+            int prioridadBuscada = leerEntero("Prioridad (1=Alta, 2=Media, 3=Baja): ");
             for (Solicitud solicitud : repositorioSolicitudes.buscarTodas()) {
                 if (solicitud.prioridad == prioridadBuscada) {
                     String nombreEstudiante = repositorioEstudiantes.buscarPorLegajo(solicitud.legajoEstudiante)
@@ -489,5 +435,15 @@ public class GestorSolicitudes {
         System.out.println("Porcentaje de resueltas: " + porcentajeResueltas + "%");
         System.out.println("Prioridad ALTA sin resolver: " + altaSinResolver);
         System.out.println("Sin responsable asignado: " + sinResponsable);
+    }
+
+    private int leerEntero(String mensaje) {
+        System.out.print(mensaje);
+        String entrada = scanner.nextLine();
+        try {
+            return Integer.parseInt(entrada.trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }
